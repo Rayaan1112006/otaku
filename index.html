@@ -9,106 +9,182 @@
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family:Segoe UI,sans-serif;
+  font-family:Segoe UI,system-ui,sans-serif;
   background:#0b0b0b;
-  color:white;
-  display:flex
+  color:#fff;
+  display:flex;
+  min-height:100vh;
 }
 
-/* SIDEBAR */
+/* ================= SIDEBAR ================= */
 .sidebar{
-  width:230px;
-  background:#111;
+  width:240px;
+  background:#0f0f0f;
   padding:20px;
   display:flex;
   flex-direction:column;
-  gap:10px
+  gap:10px;
 }
-.sidebar h2{color:crimson;text-align:center}
+.sidebar h2{
+  color:crimson;
+  text-align:center;
+  margin-bottom:10px;
+}
 .sidebar button{
   background:none;
   border:none;
   color:white;
-  padding:10px;
+  padding:12px;
   text-align:left;
-  cursor:pointer
+  cursor:pointer;
+  border-radius:6px;
+  font-size:14px;
 }
 .sidebar button.active,
-.sidebar button:hover{background:crimson}
+.sidebar button:hover{
+  background:crimson;
+}
 
-/* MAIN */
+/* ================= MAIN ================= */
 .main{
   flex:1;
-  padding:20px;
-  overflow-y:auto
+  overflow-y:auto;
 }
-section{display:none}
-section.active{display:block}
 
-/* SEARCH */
+section{
+  display:none;
+  padding:30px;
+}
+section.active{
+  display:block;
+}
+
+/* ================= HOME PAGE ================= */
+#home{
+  background:
+    linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,.85)),
+    url("otakulog-home.jpg");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+#home h1{
+  font-size:42px;
+  letter-spacing:1px;
+  margin-bottom:10px;
+}
+#home p{
+  max-width:600px;
+  color:#ccc;
+  margin-bottom:30px;
+  font-size:15px;
+}
+
+.home-buttons{
+  display:flex;
+  gap:20px;
+}
+.home-buttons button{
+  padding:14px 36px;
+  font-size:16px;
+  background:crimson;
+  border:none;
+  border-radius:30px;
+  color:white;
+  cursor:pointer;
+  transition:.3s;
+}
+.home-buttons button:hover{
+  transform:scale(1.05);
+  background:#ff2e2e;
+}
+
+/* ================= SEARCH ================= */
 .search-center{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:10px
+  gap:12px;
 }
 .search-center input{
-  width:320px;
+  width:360px;
   padding:12px;
   background:#1a1a1a;
   border:none;
   color:white;
-  border-radius:6px
+  border-radius:6px;
 }
 
-/* SUGGESTIONS */
+/* ================= SUGGESTED TAGS ================= */
 .suggested{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
-  justify-content:center
+  justify-content:center;
+  margin-top:8px;
 }
 .suggested span{
   background:#222;
-  padding:6px 12px;
-  border-radius:16px;
+  padding:6px 14px;
+  border-radius:20px;
   font-size:13px;
-  cursor:pointer
+  cursor:pointer;
 }
-.suggested span:hover{background:crimson}
+.suggested span:hover{
+  background:crimson;
+}
 
-/* GRID */
+/* ================= GRID & CARDS ================= */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-  gap:14px;
-  margin-top:20px
+  gap:16px;
+  margin-top:25px;
 }
+
 .card{
-  background:#1a1a1a;
-  border-radius:8px;
+  background:#161616;
+  border-radius:10px;
   overflow:hidden;
-  padding-bottom:8px
+  padding-bottom:10px;
+  position:relative;
 }
+
 .card img{
   width:100%;
-  height:230px;
-  object-fit:cover
+  height:240px;
+  object-fit:cover;
 }
+
 .card h4{
-  margin:6px;
-  font-size:14px
+  margin:8px;
+  font-size:14px;
 }
+
 .card p{
   font-size:12px;
-  color:#ccc;
+  color:#bbb;
   padding:0 8px;
   max-height:60px;
-  overflow:hidden
+  overflow:hidden;
 }
-.buttons{text-align:center}
 
-/* ICONS */
+/* ================= ACTION BUTTONS ================= */
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-top:6px;
+}
+
 .icon{
   width:34px;
   height:34px;
@@ -116,26 +192,39 @@ section.active{display:block}
   border:none;
   background:crimson;
   color:white;
-  margin:3px;
   cursor:pointer;
-  font-size:14px
+  font-size:14px;
 }
 
-/* FOOTER */
+/* REMOVE BUTTON */
+.remove{
+  background:#444;
+}
+.remove:hover{
+  background:#ff4444;
+}
+
+/* ================= FOOTER ================= */
 footer{
-  margin-top:40px;
-  padding:20px;
-  background:#111;
-  text-align:center
+  background:#0f0f0f;
+  padding:25px;
+  text-align:center;
+  font-size:13px;
+  color:#bbb;
+}
+footer p{
+  max-width:900px;
+  margin:auto;
+  line-height:1.6;
 }
 
-/* MOBILE */
+/* ================= MOBILE ================= */
 @media(max-width:900px){
   body{flex-direction:column}
   .sidebar{
     flex-direction:row;
     width:100%;
-    justify-content:space-around
+    overflow-x:auto;
   }
   .sidebar h2{display:none}
 }
@@ -149,166 +238,246 @@ footer{
 
 <body>
 
-<!-- SIDEBAR -->
+<!-- ========== SIDEBAR ========== -->
 <div class="sidebar">
   <h2>OtakuLog</h2>
-  <button class="active" onclick="showPage('anime',this)">Anime</button>
-  <button onclick="showPage('watchedPage',this)">Watched</button>
-  <button onclick="showPage('planPage',this)">Plan to Watch</button>
+  <button class="active" onclick="showPage('home',this)">Home</button>
+  <button onclick="showPage('anime',this)">Anime</button>
   <button onclick="showPage('manga',this)">Manga</button>
   <button onclick="showPage('suggestions',this)">Suggestions</button>
+  <button onclick="showPage('facts',this)">Facts</button>
   <button onclick="showPage('news',this)">News</button>
+  <button onclick="showPage('stats',this)">Stats</button>
 </div>
 
 <div class="main">
 
-<!-- ANIME SEARCH -->
-<section id="anime" class="active">
-<div class="search-center">
-<input id="animeInput" placeholder="Search anime...">
-<button class="icon" onclick="searchAnime()">🔍</button>
+<!-- ========== HOME PAGE ========== -->
+<section id="home">
 
-<div class="suggested">
-<span onclick="genreAnime(30)">Sports</span>
-<span onclick="genreAnime(24)">Sci-Fi</span>
-<span onclick="genreAnime(10)">Fantasy</span>
-<span onclick="genreAnime(62)">Isekai</span>
-<span onclick="genreAnime(4)">Comedy</span>
-<span onclick="genreAnime(1)">Romance</span>
-<span onclick="topAnime()">Popular</span>
-</div>
-</div>
+  <h1>OtakuLog</h1>
+  <p>
+    OtakuLog is a personal anime & manga tracking platform designed for enthusiasts
+    who want a clean, focused, and powerful way to discover, organize, and explore
+    their favorite stories across studios, genres, and cultures.
+  </p>
 
-<div id="animeGrid" class="grid"></div>
+  <div class="home-buttons">
+    <button onclick="showPage('anime',document.querySelectorAll('.sidebar button')[1])">
+      Explore Anime
+    </button>
+    <button onclick="showPage('manga',document.querySelectorAll('.sidebar button')[2])">
+      Explore Manga
+    </button>
+  </div>
+</section>
+<!-- ================= ANIME SECTION ================= -->
+<section id="anime">
+
+  <div class="search-center">
+    <input id="animeInput" placeholder="Search anime...">
+    <button class="icon" onclick="searchAnime()">🔍</button>
+
+    <!-- THEMES & STUDIOS -->
+    <div class="suggested">
+      <span onclick="genreAnime(30)">Sports</span>
+      <span onclick="genreAnime(62)">Isekai</span>
+      <span onclick="genreAnime(8)">Drama</span>
+      <span onclick="genreAnime(36)">Slice of Life</span>
+      <span onclick="genreAnime(41)">Thriller</span>
+      <span onclick="genreAnime(22)">Romance</span>
+      <span onclick="genreAnime(10)">Fantasy</span>
+      <span onclick="genreAnime(14)">Horror</span>
+      <span onclick="genreAnime(24)">Sci-Fi</span>
+      <span onclick="genreAnime(4)">Comedy</span>
+      <span onclick="genreAnime(18)">Cars</span>
+      <span onclick="genreAnime(47)">Adult (18+)</span>
+      <span onclick="studioAnime('MAPPA')">MAPPA</span>
+      <span onclick="studioAnime('Kyoto Animation')">KyoAni</span>
+      <span onclick="topAnime()">Popular</span>
+    </div>
+  </div>
+
+  <!-- SEARCH RESULT -->
+  <h3>Search Results</h3>
+  <div id="animeGrid" class="grid"></div>
+
+  <!-- SUB DASHBOARD -->
+  <h3>Watched</h3>
+  <div id="watchedGrid" class="grid"></div>
+
+  <h3>Plan to Watch</h3>
+  <div id="planGrid" class="grid"></div>
+
 </section>
 
-<!-- WATCHED DASHBOARD -->
-<section id="watchedPage">
-<h2>Watched Anime</h2>
-<div id="watchedGrid" class="grid"></div>
-</section>
-
-<!-- PLAN DASHBOARD -->
-<section id="planPage">
-<h2>Plan to Watch</h2>
-<div id="planGrid" class="grid"></div>
-</section>
-
-<!-- MANGA -->
+<!-- ================= MANGA SECTION ================= -->
 <section id="manga">
-<div class="search-center">
-<input id="mangaInput" placeholder="Search manga...">
-<button class="icon" onclick="searchManga()">🔍</button>
 
-<div class="suggested">
-<span onclick="mangaGenre(4)">Comedy</span>
-<span onclick="mangaGenre(8)">Drama</span>
-<span onclick="mangaGenre(10)">Fantasy</span>
-<span onclick="topManga()">Popular</span>
-<span onclick="searchMangaType('manhwa')">Korean</span>
-<span onclick="searchMangaType('manhua')">Chinese</span>
-<span onclick="searchMangaType('india')">Indian</span>
-</div>
-</div>
+  <div class="search-center">
+    <input id="mangaInput" placeholder="Search manga...">
+    <button class="icon" onclick="searchManga()">🔍</button>
 
-<div id="mangaGrid" class="grid"></div>
+    <div class="suggested">
+      <span onclick="mangaGenre(4)">Comedy</span>
+      <span onclick="mangaGenre(8)">Drama</span>
+      <span onclick="mangaGenre(10)">Fantasy</span>
+      <span onclick="mangaGenre(14)">Horror</span>
+      <span onclick="mangaGenre(22)">Romance</span>
+      <span onclick="searchMangaType('manhwa')">Korean</span>
+      <span onclick="searchMangaType('manhua')">Chinese</span>
+      <span onclick="searchMangaType('india')">Indian</span>
+      <span onclick="topManga()">Popular</span>
+    </div>
+  </div>
 
-<h3>Reading</h3><div id="readingGrid" class="grid"></div>
-<h3>Read</h3><div id="readGrid" class="grid"></div>
-<h3>Plan to Read</h3><div id="planReadGrid" class="grid"></div>
+  <h3>Search Results</h3>
+  <div id="mangaGrid" class="grid"></div>
+
+  <!-- SUB DASHBOARD -->
+  <h3>Reading</h3>
+  <div id="readingGrid" class="grid"></div>
+
+  <h3>Read</h3>
+  <div id="readGrid" class="grid"></div>
+
+  <h3>Plan to Read</h3>
+  <div id="planReadGrid" class="grid"></div>
+
 </section>
 
-<!-- SUGGESTIONS -->
-<section id="suggestions">
-<h2>Recommended Anime</h2>
-<div id="suggestGrid" class="grid"></div>
-
-<h3>Random Anime Fact</h3>
-<p id="factBox"></p>
-</section>
-
-<!-- NEWS -->
-<section id="news">
-<h2>Currently Airing</h2>
-<div id="airingGrid" class="grid"></div>
-
-<h2>Upcoming Anime</h2>
-<div id="upcomingGrid" class="grid"></div>
-</section>
-
-<footer>
-<p><b>Author:</b> Rayaan K</p>
-<p><b>Email:</b> rayaan.3016@gmail.com</p>
-</footer>
-
-</div>
-
+<!-- ================= SCRIPT ================= -->
 <script>
 let animeData=[], mangaData=[];
 let watched=[], plan=[];
 let reading=[], read=[], planRead=[];
 
-const facts=[
-"One Piece has over 1000 episodes.",
-"Spirited Away won an Oscar.",
-"Attack on Titan was rejected initially.",
-"Death Note is banned in some schools.",
-"Your Name is one of the highest-grossing anime films."
-];
 
-function showPage(id,btn){
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  document.querySelectorAll(".sidebar button").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-}
-
-document.addEventListener("keydown",e=>{
-  if(e.key==="Enter"){
-    if(document.activeElement.id==="animeInput")searchAnime();
-    if(document.activeElement.id==="mangaInput")searchManga();
+function loadAnimeHome(){
+  if(!animeData || animeData.length === 0){
+    topAnime();
   }
-});
+}
 
-function renderAnime(grid,data,withButtons=false){
+function loadMangaHome(){
+  if(!mangaData || mangaData.length === 0){
+    topManga();
+  }
+}
+
+/* ---------- PAGE SWITCH ---------- */
+function showPage(id, btn) {
+  // hide ALL sections forcefully
+  document.querySelectorAll("section").forEach(sec => {
+    sec.style.display = "none";
+    sec.classList.remove("active");
+  });
+
+  // show ONLY the selected one
+  const target = document.getElementById(id);
+  if (target) {
+    target.style.display = "block";
+    target.classList.add("active");
+  }
+
+  // sidebar button state
+  document.querySelectorAll(".sidebar button").forEach(b =>
+    b.classList.remove("active")
+  );
+  if (btn) btn.classList.add("active");
+
+  // auto load content
+  if (id === "anime") loadAnimeHome();
+  if (id === "manga") loadMangaHome();
+}
+
+/* ---------- RENDER ANIME ---------- */
+function renderAnime(grid,data,actions=false,source="anime"){
   grid.innerHTML=data.map((a,i)=>`
-  <div class="card">
-    <img src="${a.images.jpg.image_url}">
-    <h4>${a.title}</h4>
-    <p>${a.synopsis||"No description available."}</p>
-    ${withButtons?`
-    <div class="buttons">
-      <button class="icon" onclick="addWatched(${i})">✔</button>
-      <button class="icon" onclick="addPlan(${i})">➕</button>
-    </div>`:""}
-  </div>`).join("");
-}
+    <div class="card">
+      <img src="${a.images.jpg.image_url}">
+      <h4>${a.title}</h4>
+      <p>${a.synopsis||"No description available."}</p>
 
-function renderManga(grid,data){
-  grid.innerHTML=data.map((m,i)=>`
-  <div class="card">
-    <img src="${m.images.jpg.image_url}">
-    <h4>${m.title}</h4>
-    <p>${m.synopsis||"No description available."}</p>
-    <div class="buttons">
-      <button class="icon" onclick="reading.push(mangaData[${i}]);update()">📖</button>
-      <button class="icon" onclick="read.push(mangaData[${i}]);update()">✔</button>
-      <button class="icon" onclick="planRead.push(mangaData[${i}]);update()">➕</button>
+      ${actions?`
+      <div class="buttons">
+        <button class="icon" onclick="addWatched(${i})">✔</button>
+        <button class="icon" onclick="addPlan(${i})">➕</button>
+      </div>`:""}
+
+      ${source!=="anime"?`
+      <div class="buttons">
+        <button class="icon remove" onclick="removeItem('${source}',${i})">🗑</button>
+      </div>`:""}
     </div>
-  </div>`).join("");
+  `).join("");
 }
 
+/* ---------- RENDER MANGA ---------- */
+function renderManga(grid,data,source){
+  grid.innerHTML=data.map((m,i)=>`
+    <div class="card">
+      <img src="${m.images.jpg.image_url}">
+      <h4>${m.title}</h4>
+      <p>${m.synopsis||"No description available."}</p>
+
+      ${source==="search"?`
+      <div class="buttons">
+        <button class="icon" onclick="addReading(${i})">📖</button>
+        <button class="icon" onclick="addRead(${i})">✔</button>
+        <button class="icon" onclick="addPlanRead(${i})">➕</button>
+      </div>`:""}
+
+      ${source!=="search"?`
+      <div class="buttons">
+        <button class="icon remove" onclick="removeItem('${source}',${i})">🗑</button>
+      </div>`:""}
+    </div>
+  `).join("");
+}
+
+/* ---------- UPDATE DASHBOARDS ---------- */
 function update(){
-  renderAnime(watchedGrid,watched);
-  renderAnime(planGrid,plan);
-  renderManga(readingGrid,reading);
-  renderManga(readGrid,read);
-  renderManga(planReadGrid,planRead);
+  renderAnime(watchedGrid,watched,false,"watched");
+  renderAnime(planGrid,plan,false,"plan");
+
+  renderManga(readingGrid,reading,"reading");
+  renderManga(readGrid,read,"read");
+  renderManga(planReadGrid,planRead,"planRead");
 }
 
-function addWatched(i){ watched.push(animeData[i]); update(); }
-function addPlan(i){ plan.push(animeData[i]); update(); }
+/* ---------- ADD / REMOVE ---------- */
+function addWatched(i){
+  if(!watched.includes(animeData[i])) watched.push(animeData[i]);
+  update();
+}
+function addPlan(i){
+  if(!plan.includes(animeData[i])) plan.push(animeData[i]);
+  update();
+}
+function addReading(i){
+  if(!reading.includes(mangaData[i])) reading.push(mangaData[i]);
+  update();
+}
+function addRead(i){
+  if(!read.includes(mangaData[i])) read.push(mangaData[i]);
+  update();
+}
+function addPlanRead(i){
+  if(!planRead.includes(mangaData[i])) planRead.push(mangaData[i]);
+  update();
+}
 
+function removeItem(type,i){
+  if(type==="watched") watched.splice(i,1);
+  if(type==="plan") plan.splice(i,1);
+  if(type==="reading") reading.splice(i,1);
+  if(type==="read") read.splice(i,1);
+  if(type==="planRead") planRead.splice(i,1);
+  update();
+}
+
+/* ---------- API CALLS ---------- */
 async function searchAnime(){
   const r=await fetch(`https://api.jikan.moe/v4/anime?q=${animeInput.value}&limit=12`);
   animeData=(await r.json()).data;
@@ -319,51 +488,654 @@ async function genreAnime(id){
   animeData=(await r.json()).data;
   renderAnime(animeGrid,animeData,true);
 }
+async function studioAnime(name){
+  const r=await fetch(`https://api.jikan.moe/v4/anime?q=${name}&limit=12`);
+  animeData=(await r.json()).data;
+  renderAnime(animeGrid,animeData,true);
+}
 async function topAnime(){
   const r=await fetch("https://api.jikan.moe/v4/top/anime?limit=12");
   animeData=(await r.json()).data;
   renderAnime(animeGrid,animeData,true);
 }
 
+/* ---------- MANGA ---------- */
 async function searchManga(){
   const r=await fetch(`https://api.jikan.moe/v4/manga?q=${mangaInput.value}&limit=12`);
   mangaData=(await r.json()).data;
-  renderManga(mangaGrid,mangaData);
+  renderManga(mangaGrid,mangaData,"search");
 }
 async function mangaGenre(id){
   const r=await fetch(`https://api.jikan.moe/v4/manga?genres=${id}&limit=12`);
   mangaData=(await r.json()).data;
-  renderManga(mangaGrid,mangaData);
+  renderManga(mangaGrid,mangaData,"search");
 }
 async function topManga(){
   const r=await fetch("https://api.jikan.moe/v4/top/manga?limit=12");
   mangaData=(await r.json()).data;
-  renderManga(mangaGrid,mangaData);
+  renderManga(mangaGrid,mangaData,"search");
 }
 async function searchMangaType(q){
   const r=await fetch(`https://api.jikan.moe/v4/manga?q=${q}&limit=12`);
   mangaData=(await r.json()).data;
-  renderManga(mangaGrid,mangaData);
+  renderManga(mangaGrid,mangaData,"search");
 }
-
-async function loadNews(){
-  const a=await fetch("https://api.jikan.moe/v4/seasons/now");
-  const u=await fetch("https://api.jikan.moe/v4/seasons/upcoming");
-  renderAnime(airingGrid,(await a.json()).data);
-  renderAnime(upcomingGrid,(await u.json()).data);
-}
-
-async function loadSuggestions(){
-  const r=await fetch("https://api.jikan.moe/v4/top/anime?limit=12");
-  renderAnime(suggestGrid,(await r.json()).data);
-  factBox.innerText=facts[Math.floor(Math.random()*facts.length)];
-}
-
-topAnime();
-topManga();
-loadNews();
-loadSuggestions();
 </script>
+<!-- ================= NEWS SECTION ================= -->
+<section id="news">
 
-</body>
-</html>
+  <h2>Currently Airing</h2>
+  <p style="color:#aaa;font-size:13px">
+    Live data — updates automatically with every refresh.
+  </p>
+  <div id="airingGrid" class="grid"></div>
+
+  <h2 style="margin-top:40px">Upcoming & Officially Announced</h2>
+  <p style="color:#aaa;font-size:13px">
+    These titles are officially announced but not yet airing.
+  </p>
+  <div id="upcomingGrid" class="grid"></div>
+
+</section>
+
+<!-- ================= SUGGESTIONS ================= -->
+<section id="suggestions">
+
+  <h2>Where to Watch Anime</h2>
+  <div class="grid">
+
+    <div class="card">
+      <h4>HiAnime</h4>
+      <p>Free anime streaming platform with sub & dub content.</p>
+      <div class="buttons">
+        <a href="https://hianime.to" target="_blank">
+          <button class="icon">🌐</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>Crunchyroll</h4>
+      <p>Official anime streaming with simulcasts.</p>
+      <div class="buttons">
+        <a href="https://www.crunchyroll.com" target="_blank">
+          <button class="icon">🌐</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>Netflix Anime</h4>
+      <p>High-quality originals and licensed anime.</p>
+      <div class="buttons">
+        <a href="https://www.netflix.com" target="_blank">
+          <button class="icon">🌐</button>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <h2 style="margin-top:40px">Where to Read Manga</h2>
+  <div class="grid">
+
+    <div class="card">
+      <h4>Manga Plus</h4>
+      <p>Official Shueisha manga platform.</p>
+      <div class="buttons">
+        <a href="https://mangaplus.shueisha.co.jp" target="_blank">
+          <button class="icon">📖</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>Webtoon</h4>
+      <p>Best platform for Manhwa & web comics.</p>
+      <div class="buttons">
+        <a href="https://www.webtoons.com" target="_blank">
+          <button class="icon">📖</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>Viz Media</h4>
+      <p>Official English manga publisher.</p>
+      <div class="buttons">
+        <a href="https://www.viz.com" target="_blank">
+          <button class="icon">📖</button>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FACTS ================= -->
+<section id="facts">
+
+  <h2>Anime & Manga Facts</h2>
+  <p style="color:#aaa;font-size:13px">
+    Industry facts, announcements & interesting trivia.
+  </p>
+
+  <div class="card" style="margin-top:20px">
+    <p id="factBox" style="padding:20px;font-size:14px"></p>
+    <div class="buttons">
+      <button class="icon" onclick="randomFact()">🔄</button>
+    </div>
+  </div>
+
+</section>
+
+<!-- ================= SCRIPT ================= -->
+<script>
+const facts = [
+  "MAPPA announced multiple high-budget anime projects for upcoming years.",
+  "One Piece officially crossed 1000+ episodes and chapters.",
+  "Attack on Titan changed studios mid-production and still succeeded.",
+  "Jujutsu Kaisen Season 3 is officially announced.",
+  "Demon Slayer movies consistently break box office records.",
+  "Vinland Saga was praised for its philosophical storytelling.",
+  "Chainsaw Man anime boosted manga sales worldwide.",
+  "Anime contributes billions annually to Japan’s economy.",
+  "Most anime seasons are planned 2–3 years before release.",
+  "Studio Ghibli movies are hand-drawn with minimal CGI."
+];
+
+function randomFact(){
+  factBox.innerText = facts[Math.floor(Math.random() * facts.length)];
+}
+
+/* ---------- NEWS LOADER ---------- */
+async function loadNews(){
+  const airing = await fetch("https://api.jikan.moe/v4/seasons/now");
+  const upcoming = await fetch("https://api.jikan.moe/v4/seasons/upcoming");
+
+  const airingData = (await airing.json()).data;
+  const upcomingData = (await upcoming.json()).data;
+
+  airingGrid.innerHTML = airingData.map(a => `
+    <div class="card">
+      <img src="${a.images.jpg.image_url}">
+      <h4>${a.title}</h4>
+      <p>${a.synopsis || "Currently airing."}</p>
+    </div>
+  `).join("");
+
+  upcomingGrid.innerHTML = upcomingData.map(a => `
+    <div class="card">
+      <img src="${a.images.jpg.image_url}">
+      <h4>${a.title}</h4>
+      <p>
+        Officially announced
+        ${a.season ? `• ${a.season.toUpperCase()} ${a.year || ""}` : ""}
+      </p>
+    </div>
+  `).join("");
+}
+
+/* ---------- INIT ---------- */
+randomFact();
+loadNews();
+</script>
+<!-- ================= STATS DASHBOARD ================= -->
+<section id="stats">
+  <h2>Your Stats</h2>
+
+  <div class="grid">
+    <div class="card"><h4>Anime Watched</h4><p id="statWatched">0</p></div>
+    <div class="card"><h4>Plan to Watch</h4><p id="statPlan">0</p></div>
+    <div class="card"><h4>Manga Reading</h4><p id="statReading">0</p></div>
+    <div class="card"><h4>Manga Read</h4><p id="statRead">0</p></div>
+    <div class="card"><h4>Plan to Read</h4><p id="statPlanRead">0</p></div>
+  </div>
+</section>
+
+<!-- ================= ADVANCED FILTERS ================= -->
+<div id="advancedFilters" style="margin-top:20px">
+
+  <h3>Advanced Filters</h3>
+
+  <div class="suggested">
+    <span onclick="filterByType('tv')">TV</span>
+    <span onclick="filterByType('movie')">Movie</span>
+    <span onclick="filterByType('ova')">OVA</span>
+    <span onclick="filterByScore(8)">Score 8+</span>
+    <span onclick="filterByScore(7)">Score 7+</span>
+    <span onclick="filterByEpisodes(12)">≤ 12 EP</span>
+    <span onclick="filterByEpisodes(24)">≤ 24 EP</span>
+    <span onclick="filterByYear(2024)">2024</span>
+    <span onclick="filterByYear(2023)">2023</span>
+  </div>
+
+</div>
+
+<!-- ================= THEME SWITCH BUTTON ================= -->
+<script>
+/* ---------- THEME SYSTEM ---------- */
+const root = document.documentElement;
+const themeBtn = document.createElement("button");
+themeBtn.textContent = "🌙 Theme";
+themeBtn.style.marginTop = "auto";
+themeBtn.onclick = toggleTheme;
+document.querySelector(".sidebar").appendChild(themeBtn);
+
+function toggleTheme(){
+  const current = localStorage.getItem("theme") || "dark";
+  const next = current === "dark" ? "light" : "dark";
+  localStorage.setItem("theme", next);
+  applyTheme();
+}
+
+function applyTheme(){
+  const theme = localStorage.getItem("theme") || "dark";
+
+  if(theme === "light"){
+    root.style.setProperty("--bg","#f4f4f4");
+    root.style.setProperty("--card","#ffffff");
+    root.style.setProperty("--text","#111");
+    document.body.style.background = "#f4f4f4";
+    document.body.style.color = "#111";
+  }else{
+    root.style.setProperty("--bg","#0b0b0b");
+    root.style.setProperty("--card","#161616");
+    root.style.setProperty("--text","#fff");
+    document.body.style.background = "#0b0b0b";
+    document.body.style.color = "#fff";
+  }
+}
+applyTheme();
+
+/* ---------- STATS UPDATE ---------- */
+function updateStats(){
+  statWatched.innerText = watched.length;
+  statPlan.innerText = plan.length;
+  statReading.innerText = reading.length;
+  statRead.innerText = read.length;
+  statPlanRead.innerText = planRead.length;
+}
+
+/* hook stats into existing update() */
+const oldUpdate = update;
+update = function(){
+  oldUpdate();
+  updateStats();
+};
+
+/* ---------- ADVANCED FILTERS ---------- */
+function filterByType(type){
+  const filtered = animeData.filter(a => a.type?.toLowerCase() === type);
+  renderAnime(animeGrid, filtered, true);
+}
+
+function filterByScore(score){
+  const filtered = animeData.filter(a => a.score && a.score >= score);
+  renderAnime(animeGrid, filtered, true);
+}
+
+function filterByEpisodes(max){
+  const filtered = animeData.filter(a => a.episodes && a.episodes <= max);
+  renderAnime(animeGrid, filtered, true);
+}
+
+function filterByYear(year){
+  const filtered = animeData.filter(a => a.year === year);
+  renderAnime(animeGrid, filtered, true);
+}
+</script>
+<script>
+/* =========================================================
+   LOCAL STORAGE ENGINE
+   ========================================================= */
+
+const STORAGE_KEY = "otakulog-data-v1";
+
+/* ---------- DEFAULT DATA ---------- */
+const defaultStore = {
+  profile: {
+    username: "Otaku",
+    avatar: "🦊"
+  },
+  anime: {
+    watched: [],
+    plan: []
+  },
+  manga: {
+    reading: [],
+    read: [],
+    plan: []
+  }
+};
+
+/* ---------- LOAD DATA ---------- */
+function loadStore(){
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if(!saved){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultStore));
+    return JSON.parse(JSON.stringify(defaultStore));
+  }
+  return JSON.parse(saved);
+}
+
+/* ---------- SAVE DATA ---------- */
+function saveStore(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+}
+
+/* ---------- GLOBAL STORE ---------- */
+let store = loadStore();
+
+/* ---------- SYNC STORE → MEMORY ---------- */
+watched   = store.anime.watched || [];
+plan      = store.anime.plan || [];
+reading   = store.manga.reading || [];
+read      = store.manga.read || [];
+planRead  = store.manga.plan || [];
+
+/* ---------- OVERRIDE UPDATE ---------- */
+const originalUpdate = update;
+update = function(){
+  originalUpdate();
+
+  store.anime.watched = watched;
+  store.anime.plan = plan;
+  store.manga.reading = reading;
+  store.manga.read = read;
+  store.manga.plan = planRead;
+
+  saveStore();
+};
+
+/* ---------- SAVE ON REMOVE ---------- */
+const originalRemove = removeItem;
+removeItem = function(type,i){
+  originalRemove(type,i);
+  saveStore();
+};
+
+/* =========================================================
+   PROFILE CORE (NO UI YET)
+   ========================================================= */
+
+function setUsername(name){
+  store.profile.username = name || "Otaku";
+  saveStore();
+  renderProfile();
+}
+
+function setAvatar(emoji){
+  store.profile.avatar = emoji;
+  saveStore();
+  renderProfile();
+}
+
+/* placeholder – UI comes in next part */
+function renderProfile(){}
+
+/* ---------- INITIAL SYNC ---------- */
+document.addEventListener("DOMContentLoaded",()=>{
+  update();
+});
+</script>
+<style>
+/* ================= PROFILE UI ================= */
+.profile-mini{
+  background:#161616;
+  border-radius:10px;
+  padding:12px;
+  text-align:center;
+  margin-bottom:15px;
+}
+
+.profile-mini .avatar{
+  font-size:32px;
+}
+
+.profile-mini h4{
+  margin:6px 0 0;
+  font-size:14px;
+}
+
+.profile-mini button{
+  margin-top:6px;
+  background:none;
+  border:none;
+  color:crimson;
+  cursor:pointer;
+  font-size:12px;
+}
+
+/* HOME PROFILE */
+.profile-home{
+  background:#161616;
+  padding:25px;
+  border-radius:14px;
+  max-width:500px;
+  margin:40px auto 0;
+  text-align:center;
+}
+
+.profile-home .avatar{
+  font-size:48px;
+}
+
+.avatar-picker{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin:12px 0;
+}
+
+.avatar-picker span{
+  font-size:28px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.avatar-picker span:hover{
+  transform:scale(1.2);
+}
+</style>
+
+<script>
+/* =========================================================
+   PROFILE UI RENDER
+   ========================================================= */
+
+const avatarOptions = ["🦊","🐺","🐉","🦁","🐼","🦅","🐱","🐲"];
+
+/* ---------- SIDEBAR MINI PROFILE ---------- */
+function renderSidebarProfile(){
+  const sidebar = document.querySelector(".sidebar");
+
+  let card = document.querySelector(".profile-mini");
+  if(!card){
+    card = document.createElement("div");
+    card.className = "profile-mini";
+    sidebar.insertBefore(card, sidebar.children[1]);
+  }
+
+  card.innerHTML = `
+    <div class="avatar">${store.profile.avatar}</div>
+    <h4>${store.profile.username}</h4>
+    <button onclick="editProfile()">Edit</button>
+  `;
+}
+
+/* ---------- HOME PROFILE ---------- */
+function renderHomeProfile(editing=false){
+  const home = document.getElementById("home");
+  if(!home) return;
+
+  let box = document.querySelector(".profile-home");
+  if(!box){
+    box = document.createElement("div");
+    box.className = "profile-home";
+    home.appendChild(box);
+  }
+
+  box.innerHTML = `
+    <div class="avatar">${store.profile.avatar}</div>
+    <h2>${store.profile.username}</h2>
+
+    ${
+      editing ? `
+        <input id="nameInput"
+          value="${store.profile.username}"
+          style="padding:8px;width:80%;margin-top:12px"
+        >
+
+        <div class="avatar-picker">
+          ${avatarOptions.map(a=>`
+            <span onclick="setAvatar('${a}')">${a}</span>
+          `).join("")}
+        </div>
+
+        <button class="icon" onclick="saveProfile()">Save</button>
+      ` : `
+        <p style="color:#aaa;font-size:14px">
+          Tracking anime & manga your way.
+        </p>
+        <button class="icon" onclick="editProfile()">Edit Profile</button>
+      `
+    }
+  `;
+}
+
+  
+   
+/* ---------- EDIT HANDLERS ---------- */
+function editProfile(){
+  renderHomeProfile(true);
+}
+
+function saveProfile(){
+  const input = document.getElementById("nameInput");
+  if(input && input.value.trim()){
+    setUsername(input.value.trim());
+  }
+  renderHomeProfile(false);
+}
+
+
+/* ---------- MASTER RENDER ---------- */
+function renderProfile(){
+  renderSidebarProfile();
+  renderHomeProfile();
+}
+
+/* ---------- INIT ---------- */
+document.addEventListener("DOMContentLoaded",()=>{
+  renderProfile();
+});
+</script>
+<script>
+/* =========================================================
+   AI RECOMMENDATION ENGINE (RULE BASED)
+   ========================================================= */
+
+/* ---------- EXTRACT USER TASTE ---------- */
+function getUserTaste(){
+  const genreCount = {};
+  const studioCount = {};
+  let epTotal = 0;
+  let epCount = 0;
+
+  watched.forEach(a=>{
+    a.genres?.forEach(g=>{
+      genreCount[g.mal_id] = (genreCount[g.mal_id] || 0) + 1;
+    });
+
+    a.studios?.forEach(s=>{
+      studioCount[s.name] = (studioCount[s.name] || 0) + 1;
+    });
+
+    if(a.episodes){
+      epTotal += a.episodes;
+      epCount++;
+    }
+  });
+
+  const topGenre = Object.keys(genreCount)
+    .sort((a,b)=>genreCount[b]-genreCount[a])[0];
+
+  const topStudio = Object.keys(studioCount)
+    .sort((a,b)=>studioCount[b]-studioCount[a])[0];
+
+  const avgEpisodes = epCount ? Math.round(epTotal/epCount) : null;
+
+  return { topGenre, topStudio, avgEpisodes };
+}
+
+/* ---------- FETCH & SCORE ---------- */
+async function loadAIRecommendations(){
+  if(watched.length < 3){
+    aiGrid.innerHTML = `
+      <p style="color:#aaa">
+        Watch a few anime to unlock personalized recommendations.
+      </p>`;
+    return;
+  }
+
+  const taste = getUserTaste();
+  let url = "https://api.jikan.moe/v4/anime?limit=12";
+
+  if(taste.topGenre){
+    url += `&genres=${taste.topGenre}`;
+  }
+
+  const r = await fetch(url);
+  const data = (await r.json()).data;
+
+  const scored = data.map(a=>{
+    let score = 0;
+
+    if(a.studios?.some(s=>s.name === taste.topStudio)) score += 2;
+    if(taste.avgEpisodes && a.episodes){
+      if(Math.abs(a.episodes - taste.avgEpisodes) <= 6) score += 1;
+    }
+    if(a.score && a.score >= 8) score += 1;
+
+    return { anime:a, score };
+  })
+  .sort((a,b)=>b.score-a.score)
+  .slice(0,6)
+  .map(x=>x.anime);
+
+  renderAI(scored, taste);
+}
+
+/* ---------- RENDER AI ---------- */
+function renderAI(list, taste){
+  aiGrid.innerHTML = list.map(a=>`
+    <div class="card">
+      <img src="${a.images.jpg.image_url}">
+      <h4>${a.title}</h4>
+      <p>
+        Because you like
+        <b>${taste.topStudio || "similar anime"}</b>
+        and
+        <b>${taste.avgEpisodes ? taste.avgEpisodes+" ep shows" : "this genre"}</b>
+      </p>
+    </div>
+  `).join("");
+}
+
+/* ---------- HOOK INTO UPDATE ---------- */
+const prevUpdate = update;
+update = function(){
+  prevUpdate();
+  loadAIRecommendations();
+};
+
+/* ---------- INIT ---------- */
+document.addEventListener("DOMContentLoaded",()=>{
+  loadAIRecommendations();
+});
+document.addEventListener("DOMContentLoaded", () => {
+  showPage("home");
+});
+
+</script>
