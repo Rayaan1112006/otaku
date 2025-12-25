@@ -32,40 +32,77 @@ body{
 section{display:none}
 section.active{display:block}
 
-.search-center{display:flex;flex-direction:column;align-items:center;gap:10px}
+.search-center{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px
+}
 .search-center input{
-    width:320px;padding:12px;background:#1a1a1a;
-    border:none;color:white;border-radius:6px
+    width:320px;
+    padding:12px;
+    background:#1a1a1a;
+    border:none;
+    color:white;
+    border-radius:6px
 }
 
-.suggested{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.suggested{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:center
+}
 .suggested span{
-    background:#222;padding:6px 12px;border-radius:16px;
-    font-size:13px;cursor:pointer
+    background:#222;
+    padding:6px 12px;
+    border-radius:16px;
+    font-size:12px;
+    cursor:pointer
 }
 .suggested span:hover{background:crimson}
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-    gap:14px;margin-top:20px
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:14px;
+    margin-top:20px
 }
-.card{
-    background:#1a1a1a;border-radius:8px;
-    overflow:hidden;text-align:center
-}
-.card img{width:100%;height:230px;object-fit:cover}
-.card p{font-size:14px;padding:6px}
 
+.card{
+    background:#1a1a1a;
+    border-radius:8px;
+    overflow:hidden;
+    padding-bottom:8px
+}
+.card img{width:100%;height:240px;object-fit:cover}
+.card h4{margin:6px;font-size:14px}
+.card p{
+    font-size:12px;
+    color:#ccc;
+    padding:0 6px;
+    max-height:60px;
+    overflow:hidden
+}
+
+.actions{text-align:center;margin-top:6px}
 .icon{
-    width:36px;height:36px;border-radius:50%;
-    border:none;background:crimson;color:white;
-    margin:3px;cursor:pointer
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:none;
+    background:crimson;
+    color:white;
+    margin:3px;
+    cursor:pointer
 }
 
 footer{
-    margin-top:40px;padding:20px;
-    background:#111;text-align:center;font-size:14px
+    margin-top:40px;
+    padding:20px;
+    background:#111;
+    text-align:center;
+    font-size:14px
 }
 
 /* Mobile */
@@ -88,7 +125,6 @@ footer{
     <h2>OtakuLog</h2>
     <button class="active" onclick="showPage('anime',this)">Anime</button>
     <button onclick="showPage('manga',this)">Manga</button>
-    <button onclick="showPage('suggestions',this)">Suggestions</button>
     <button onclick="showPage('news',this)">News</button>
 </div>
 
@@ -101,20 +137,27 @@ footer{
 <button class="icon" onclick="searchAnime()">🔍</button>
 
 <div class="suggested">
-<span onclick="genreAnime(8)">Drama</span>
-<span onclick="genreAnime(36)">Slice of Life</span>
-<span onclick="genreAnime(14)">Horror</span>
-<span onclick="genreAnime(1)">Romance</span>
-<span onclick="genreAnime(41)">Thriller</span>
+<span onclick="animeGenre(8)">Drama</span>
+<span onclick="animeGenre(36)">Slice of Life</span>
+<span onclick="animeGenre(14)">Horror</span>
+<span onclick="animeGenre(1)">Romance</span>
+<span onclick="animeGenre(30)">Sports</span>
+<span onclick="animeGenre(24)">Sci-Fi</span>
+<span onclick="animeGenre(10)">Fantasy</span>
+<span onclick="animeGenre(62)">Isekai</span>
+<span onclick="animeGenre(2)">Adventure</span>
+<span onclick="animeGenre(4)">Comedy</span>
+<span onclick="animeGenre(16)">Magic</span>
+<span onclick="animeGenre(19)">Music</span>
+<span onclick="animeGenre(29)">Space</span>
+<span onclick="animeGenre(3)">Cars</span>
+<span onclick="animeGenre(11)">Games</span>
+<span onclick="animeGenre(47)">Fashion</span>
 <span onclick="topAnime()">Popular</span>
 </div>
 </div>
 
 <div id="animeGrid" class="grid"></div>
-
-<h3>Watching</h3><div id="watchingGrid" class="grid"></div>
-<h3>Watched</h3><div id="watchedGrid" class="grid"></div>
-<h3>Plan to Watch</h3><div id="planGrid" class="grid"></div>
 </section>
 
 <!-- MANGA -->
@@ -126,24 +169,18 @@ footer{
 <div class="suggested">
 <span onclick="mangaGenre(8)">Drama</span>
 <span onclick="mangaGenre(1)">Romance</span>
+<span onclick="mangaGenre(30)">Sports</span>
+<span onclick="mangaGenre(10)">Fantasy</span>
+<span onclick="mangaGenre(24)">Sci-Fi</span>
+<span onclick="mangaGenre(4)">Comedy</span>
+<span onclick="mangaGenre(2)">Adventure</span>
+<span onclick="mangaType('manhwa')">Korean</span>
+<span onclick="mangaType('manhua')">Chinese</span>
 <span onclick="topManga()">Popular</span>
 </div>
 </div>
 
 <div id="mangaGrid" class="grid"></div>
-
-<h3>Reading</h3><div id="readingGrid" class="grid"></div>
-<h3>Read</h3><div id="readGrid" class="grid"></div>
-<h3>Plan to Read</h3><div id="planReadGrid" class="grid"></div>
-</section>
-
-<!-- SUGGESTIONS -->
-<section id="suggestions">
-<h2>Suggested Anime</h2>
-<div id="suggestGrid" class="grid"></div>
-
-<h2>Anime Fact</h2>
-<p id="factBox"></p>
 </section>
 
 <!-- NEWS -->
@@ -151,7 +188,7 @@ footer{
 <h2>Currently Airing</h2>
 <div id="airingGrid" class="grid"></div>
 
-<h2>Upcoming Anime</h2>
+<h2>Upcoming</h2>
 <div id="upcomingGrid" class="grid"></div>
 </section>
 
@@ -163,17 +200,7 @@ footer{
 </div>
 
 <script>
-/* STORAGE */
-let watching=[],watched=[],plan=[];
-let reading=[],read=[],planRead=[];
-
-const facts=[
-"One Piece has over 1000 episodes.",
-"Spirited Away won an Oscar.",
-"Attack on Titan was rejected initially.",
-"Death Note is banned in some schools.",
-"Your Name is one of the highest-grossing anime films."
-];
+let animeData=[],mangaData=[];
 
 function showPage(id,btn){
 document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
@@ -189,83 +216,79 @@ if(document.activeElement.id==="mangaInput")searchManga();
 }
 });
 
-function render(grid,data,buttons){
-grid.innerHTML=data.map((a,i)=>`
+function animeCard(a,i){
+return `
 <div class="card">
 <img src="${a.images.jpg.image_url}">
-<p>${a.title}</p>
-${buttons||""}
-</div>`).join("");
+<h4>${a.title}</h4>
+<p>${a.synopsis||"No description available."}</p>
+<div class="actions">
+<button class="icon" onclick="alert('Added to Watching')">▶</button>
+<button class="icon" onclick="alert('Added to Watched')">✔</button>
+<button class="icon" onclick="alert('Added to Plan')">➕</button>
+</div>
+</div>`;
 }
 
-/* ANIME */
+function mangaCard(m,i){
+return `
+<div class="card">
+<img src="${m.images.jpg.image_url}">
+<h4>${m.title}</h4>
+<p>${m.synopsis||"No description available."}</p>
+<div class="actions">
+<button class="icon" onclick="alert('Reading')">📖</button>
+<button class="icon" onclick="alert('Read')">✔</button>
+<button class="icon" onclick="alert('Plan to Read')">➕</button>
+</div>
+</div>`;
+}
+
 async function searchAnime(){
 const r=await fetch(`https://api.jikan.moe/v4/anime?q=${animeInput.value}&limit=12`);
-const d=(await r.json()).data;
-render(animeGrid,d,`
-<button class="icon" onclick="watching.push(d[0]);update()">▶</button>
-<button class="icon" onclick="watched.push(d[0]);update()">✔</button>
-<button class="icon" onclick="plan.push(d[0]);update()">➕</button>
-`);
+animeData=(await r.json()).data;
+animeGrid.innerHTML=animeData.map(animeCard).join("");
 }
 
-async function genreAnime(id){
+async function animeGenre(id){
 const r=await fetch(`https://api.jikan.moe/v4/anime?genres=${id}&limit=12`);
-render(animeGrid,(await r.json()).data);
+animeGrid.innerHTML=(await r.json()).data.map(animeCard).join("");
 }
 
 async function topAnime(){
 const r=await fetch("https://api.jikan.moe/v4/top/anime?limit=12");
-render(animeGrid,(await r.json()).data);
+animeGrid.innerHTML=(await r.json()).data.map(animeCard).join("");
 }
 
-/* MANGA */
 async function searchManga(){
 const r=await fetch(`https://api.jikan.moe/v4/manga?q=${mangaInput.value}&limit=12`);
-const d=(await r.json()).data;
-render(mangaGrid,d,`
-<button class="icon" onclick="reading.push(d[0]);update()">📖</button>
-<button class="icon" onclick="read.push(d[0]);update()">✔</button>
-<button class="icon" onclick="planRead.push(d[0]);update()">➕</button>
-`);
+mangaData=(await r.json()).data;
+mangaGrid.innerHTML=mangaData.map(mangaCard).join("");
 }
 
 async function mangaGenre(id){
 const r=await fetch(`https://api.jikan.moe/v4/manga?genres=${id}&limit=12`);
-render(mangaGrid,(await r.json()).data);
+mangaGrid.innerHTML=(await r.json()).data.map(mangaCard).join("");
+}
+
+async function mangaType(type){
+const r=await fetch(`https://api.jikan.moe/v4/manga?q=${type}&limit=12`);
+mangaGrid.innerHTML=(await r.json()).data.map(mangaCard).join("");
 }
 
 async function topManga(){
 const r=await fetch("https://api.jikan.moe/v4/top/manga?limit=12");
-render(mangaGrid,(await r.json()).data);
+mangaGrid.innerHTML=(await r.json()).data.map(mangaCard).join("");
 }
 
-/* NEWS */
 async function loadNews(){
-render(airingGrid,(await (await fetch("https://api.jikan.moe/v4/seasons/now")).json()).data);
-render(upcomingGrid,(await (await fetch("https://api.jikan.moe/v4/seasons/upcoming")).json()).data);
+airingGrid.innerHTML=(await (await fetch("https://api.jikan.moe/v4/seasons/now")).json()).data.map(animeCard).join("");
+upcomingGrid.innerHTML=(await (await fetch("https://api.jikan.moe/v4/seasons/upcoming")).json()).data.map(animeCard).join("");
 }
 
-/* SUGGESTIONS */
-async function loadSuggestions(){
-const r=await fetch("https://api.jikan.moe/v4/top/anime?limit=12");
-render(suggestGrid,(await r.json()).data);
-factBox.innerText=facts[Math.floor(Math.random()*facts.length)];
-}
-
-function update(){
-render(watchingGrid,watching);
-render(watchedGrid,watched);
-render(planGrid,plan);
-render(readingGrid,reading);
-render(readGrid,read);
-render(planReadGrid,planRead);
-}
-
-loadNews();
-loadSuggestions();
 topAnime();
 topManga();
+loadNews();
 </script>
 
 </body>
