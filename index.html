@@ -141,6 +141,22 @@ section.active{
 .suggested span:hover{
   background:crimson;
 }
+<!-- EPISODE FILTER -->
+<div class="suggested" style="margin-top:10px">
+  <span onclick="filterByEpisodesRange(1,12)">≤ 12 Episodes</span>
+  <span onclick="filterByEpisodesRange(13,24)">13–24 Episodes</span>
+  <span onclick="filterByEpisodesRange(25,1000)">25+ Episodes</span>
+</div>
+
+<!-- CUSTOM EP INPUT -->
+<div style="text-align:center;margin-top:10px">
+  <input id="epInput"
+    type="number"
+    placeholder="Max episodes (e.g. 24)"
+    style="padding:8px;width:220px"
+  >
+  <button class="icon" onclick="searchByEpisodeCount()">Go</button>
+</div>
 
 /* ================= GRID & CARDS ================= */
 .grid{
@@ -364,6 +380,67 @@ function loadMangaHome(){
     topManga();
   }
 }
+  /* ================= LATEST ANIME NEWS ================= */
+
+async function loadAnimeNews(){
+  try{
+    const r = await fetch("https://api.jikan.moe/v4/news");
+    const data = (await r.json()).data;
+
+    animeNews.innerHTML = data.slice(0,6).map(n=>`
+      <div class="card">
+        <h4>${n.title}</h4>
+        <p style="font-size:12px;color:#ccc">
+          ${n.excerpt || "Click to read more."}
+        </p>
+        <div class="buttons">
+          <a href="${n.url}" target="_blank">
+            <button class="icon">📰</button>
+          </a>
+        </div>
+      </div>
+    `).join("");
+  }catch(e){
+    animeNews.innerHTML = `
+      <p style="color:#aaa">
+        Unable to load news at the moment.
+      </p>
+    `;
+  }
+}
+
+/* ================= EPISODE-BASED SEARCH ================= */
+
+async function filterByEpisodesRange(min, max){
+  const r = await fetch(
+    `https://api.jikan.moe/v4/anime?limit=24`
+  );
+  const data = (await r.json()).data;
+
+  const filtered = data.filter(a =>
+    a.episodes &&
+    a.episodes >= min &&
+    a.episodes <= max
+  );
+
+  renderAnime(animeGrid, filtered, true);
+}
+
+async function searchByEpisodeCount(){
+  const max = parseInt(document.getElementById("epInput").value);
+  if(!max || max <= 0) return;
+
+  const r = await fetch(
+    `https://api.jikan.moe/v4/anime?limit=24`
+  );
+  const data = (await r.json()).data;
+
+  const filtered = data.filter(a =>
+    a.episodes && a.episodes <= max
+  );
+
+  renderAnime(animeGrid, filtered, true);
+}
 
 /* ---------- PAGE SWITCH ---------- */
 function showPage(id, btn) {
@@ -523,6 +600,12 @@ async function searchMangaType(q){
 </script>
 <!-- ================= NEWS SECTION ================= -->
 <section id="news">
+<h2 style="margin-top:40px">Latest Anime News</h2>
+<p style="color:#aaa;font-size:13px">
+  Updates from the anime industry, announcements, and highlights.
+</p>
+
+<div id="animeNews" class="grid"></div>
 
   <h2>Currently Airing</h2>
   <p style="color:#aaa;font-size:13px">
@@ -1139,3 +1222,4 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
+
