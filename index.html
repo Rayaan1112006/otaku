@@ -7,11 +7,20 @@
     
     <style>
         *{box-sizing:border-box}
-        html{height:100vh;overflow:hidden}
-        body{
-            margin:0;height:100vh;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
-            background:#0a0a0a;color:#fff;display:flex;overflow:hidden;transition:all 0.3s ease;
-        }
+        html {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  /* Keep all other body styles unchanged */
+  overflow-x: hidden;
+}
+
+    
 
         /* ================= FIXED BACKGROUND ================= */
         .bg-animation{
@@ -116,6 +125,11 @@
             .main{overflow-y:auto;}
         }
         @media(max-width:600px){
+            .content-area,
+.sidebar {
+  -webkit-overflow-scrolling: touch;
+}
+
             #home h1{font-size:36px;}
             .grid{grid-template-columns:repeat(2,1fr);}
             .card img{height:200px;}
@@ -653,3 +667,4 @@
     </script>
 </body>
 </html>
+
