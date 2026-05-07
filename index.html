@@ -3,712 +3,586 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OtakuLog - Anime & Manga Tracker</title>
+    <title>OtakuLog Pro | Rayaan's Ultimate Anime Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        *{box-sizing:border-box}
-        html {
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  /* Keep all other body styles unchanged */
-  overflow-x: hidden;
-}
-
-    
-
-        /* ================= FIXED BACKGROUND ================= */
-        .bg-animation{
-            position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;
-            background:radial-gradient(circle at 20% 80%, rgba(120,119,198,0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255,119,198,0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 40%, rgba(120,219,255,0.2) 0%, transparent 50%),
-                        linear-gradient(135deg, #0c0c1a 0%, #1a0a2e 50%, #0b0b0b 100%);
-            animation:bgShift 20s ease-in-out infinite alternate;
-        }
-        @keyframes bgShift{0%{background-position:0% 50%,100% 50%,50% 0%,0% 0%}100%{background-position:100% 50%,0% 50%,50% 100%,100% 100%}}
-
-        /* ================= SIDEBAR ================= */
-        .sidebar{
-            width:260px;background:linear-gradient(180deg,rgba(15,15,15,0.95),rgba(25,25,25,0.9));
-            backdrop-filter:blur(20px);padding:25px 20px;display:flex;flex-direction:column;gap:12px;
-            box-shadow:5px 0 30px rgba(220,20,60,0.1);border-right:1px solid rgba(220,20,60,0.2);z-index:10;
-            overflow-y:auto;
-        }
-        .sidebar h2{color:#ff416c;text-align:center;margin:0 0 20px 0;font-size:24px;font-weight:700;letter-spacing:2px;text-shadow:0 0 10px rgba(255,65,108,0.5);}
-        .profile-mini{background:linear-gradient(145deg,rgba(22,22,22,0.8),rgba(35,35,35,0.8));backdrop-filter:blur(15px);border-radius:16px;padding:16px;text-align:center;border:1px solid rgba(255,65,108,0.2);transition:all 0.3s ease;}
-        .profile-mini:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,65,108,0.2);}
-        .profile-mini .avatar{font-size:36px;}
-        .profile-mini h4{margin:8px 0 0;font-size:15px;}
-        .profile-mini button{margin-top:8px;background:none;border:none;color:#ff416c;cursor:pointer;font-size:13px;font-weight:500;transition:0.3s;}
-        .profile-mini button:hover{color:#ff6b9d;}
-
-        .sidebar button{
-            background:none;border:none;color:#fff;padding:14px 16px;text-align:left;cursor:pointer;border-radius:12px;font-size:15px;font-weight:500;transition:all 0.3s ease;position:relative;overflow:hidden;
-        }
-        .sidebar button::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,65,108,0.2),transparent);transition:0.5s;}
-        .sidebar button:hover::before{left:100%;}
-        .sidebar button.active,.sidebar button:hover{background:linear-gradient(135deg,#ff416c,#ff4b6d);box-shadow:0 5px 20px rgba(255,65,108,0.4);transform:translateX(5px);}
-        .sidebar button.active::after{content:'●';position:absolute;right:12px;top:50%;transform:translateY(-50%);width:8px;height:8px;background:#fff;border-radius:50%;}
-
-        /* ================= MAIN CONTENT - FIXED SCROLL ================= */
-        .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-        .main-header{padding:20px 35px;background:rgba(15,15,15,0.8);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,65,108,0.2);position:sticky;top:0;z-index:5;}
-        .content-area{flex:1;overflow-y:auto;padding:35px;}
-        section{display:none;}
-        section.active{display:block;}
-        /* ================= ABOUT SECTION ================= */
-        .about-content{max-width:900px;margin:0 auto;}
-        .about-card{background:linear-gradient(145deg,rgba(22,22,22,0.9),rgba(35,35,35,0.9));padding:30px;border-radius:20px;margin:30px 0;border:1px solid rgba(255,65,108,0.2);}
-        .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
-        .feature-card{padding:20px;border-radius:15px;background:rgba(255,65,108,0.1);border:1px solid rgba(255,65,108,0.3);transition:all 0.3s ease;}
-        .feature-card:hover{transform:translateY(-5px);background:rgba(255,65,108,0.2);}
-        /* ================= HOME PAGE ================= */
-        #home{background:linear-gradient(135deg,rgba(0,0,0,0.7),rgba(10,10,10,0.9));min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;}
-        #home::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(45deg,transparent 48%,rgba(255,65,108,0.03) 50%,transparent 52%);animation:shimmer 3s linear infinite;}
-        @keyframes shimmer{0%{transform:translateX(-100%) skewX(-15deg);}100%{transform:translateX(300%) skewX(-15deg);}}
-        #home h1{font-size:52px;letter-spacing:3px;margin:0 0 20px 0;background:linear-gradient(135deg,#ff416c,#ff4b6d,#ff6b9d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-shadow:0 0 30px rgba(255,65,108,0.5);animation:glow 2s ease-in-out infinite alternate;}
-        @keyframes glow{0%{text-shadow:0 0 20px rgba(255,65,108,0.5);}100%{text-shadow:0 0 40px rgba(255,65,108,0.8),0 0 60px rgba(255,65,108,0.3);}}
-        #home p{max-width:650px;color:#ddd;margin-bottom:40px;font-size:16px;line-height:1.6;}
-        .home-buttons{display:flex;gap:25px;flex-wrap:wrap;justify-content:center;}
-        .home-buttons button{padding:18px 45px;font-size:17px;font-weight:600;background:linear-gradient(135deg,#ff416c,#ff4b6d);border:none;border-radius:50px;color:white;cursor:pointer;transition:all 0.4s ease;box-shadow:0 10px 30px rgba(255,65,108,0.4);position:relative;overflow:hidden;}
-        .home-buttons button::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);transition:0.5s;}
-        .home-buttons button:hover::before{left:100%;}
-        .home-buttons button:hover{transform:translateY(-5px) scale(1.05);box-shadow:0 20px 50px rgba(255,65,108,0.6);}
-
-        /* ================= SEARCH & COMMON ELEMENTS ================= */
-        .search-center{display:flex;flex-direction:column;align-items:center;gap:15px;}
-        .search-center input{width:400px;padding:16px 20px;background:linear-gradient(145deg,rgba(26,26,26,0.8),rgba(40,40,40,0.8));border:2px solid rgba(255,65,108,0.2);color:white;border-radius:12px;font-size:16px;backdrop-filter:blur(15px);transition:all 0.3s ease;}
-        .search-center input:focus{outline:none;border-color:#ff416c;box-shadow:0 0 0 4px rgba(255,65,108,0.2);}
-        .search-center .icon{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#ff416c,#ff4b6d);border:none;color:white;cursor:pointer;font-size:18px;transition:all 0.3s ease;}
-        .search-center .icon:hover{transform:scale(1.1) rotate(10deg);box-shadow:0 10px 30px rgba(255,65,108,0.5);}
-
-        .suggested{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:15px;}
-        .suggested span{background:linear-gradient(145deg,rgba(34,34,34,0.8),rgba(50,50,50,0.8));padding:10px 20px;border-radius:25px;font-size:14px;cursor:pointer;font-weight:500;backdrop-filter:blur(10px);border:1px solid rgba(255,65,108,0.2);transition:all 0.3s ease;}
-        .suggested span:hover{background:linear-gradient(135deg,#ff416c,#ff4b6d);transform:translateY(-3px);box-shadow:0 10px 25px rgba(255,65,108,0.4);border-color:rgba(255,255,255,0.3);}
-
-        /* ================= GRID & CARDS ================= */
-        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;margin-top:30px;}
-        h3{margin:40px 0 20px 0;font-size:24px;color:#ff416c;font-weight:700;letter-spacing:1px;}
-        h2{font-size:28px;color:#ff416c;font-weight:700;margin:0 0 20px 0;text-align:center;}
-        
-        .card{background:linear-gradient(145deg,rgba(22,22,22,0.9),rgba(35,35,35,0.9));border-radius:20px;overflow:hidden;padding-bottom:15px;position:relative;backdrop-filter:blur(15px);border:1px solid rgba(255,65,108,0.15);transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);transform:translateY(0);}
-        .card:hover{transform:translateY(-15px) scale(1.02);box-shadow:0 30px 60px rgba(255,65,108,0.3);border-color:rgba(255,65,108,0.4);}
-        .card img{width:100%;height:280px;object-fit:cover;transition:all 0.4s ease;}
-        .card:hover img{transform:scale(1.05);}
-        .card h4{margin:15px 15px 10px;font-size:16px;font-weight:600;line-height:1.3;}
-        .card p{font-size:13px;color:#ccc;padding:0 15px;max-height:75px;overflow:hidden;line-height:1.5;}
-        
-        /* ================= BUTTONS ================= */
-        .buttons{display:flex;justify-content:center;gap:8px;margin-top:12px;padding:0 10px;}
-        .icon{width:42px;height:42px;border-radius:50%;border:none;background:linear-gradient(135deg,#ff416c,#ff4b6d);color:white;cursor:pointer;font-size:16px;font-weight:bold;transition:all 0.3s ease;box-shadow:0 5px 15px rgba(255,65,108,0.3);}
-        .icon:hover{transform:scale(1.15) rotate(5deg);box-shadow:0 10px 25px rgba(255,65,108,0.5);}
-        .remove{background:linear-gradient(135deg,#444,#555)!important;}
-        .remove:hover{background:linear-gradient(135deg,#ff4444,#ff6666)!important;transform:scale(1.15) rotate(-5deg)!important;}
-
-        /* ================= FOOTER ================= */
-        footer{background:linear-gradient(180deg,rgba(15,15,15,0.95),rgba(5,5,5,0.9));padding:30px;text-align:center;font-size:14px;color:#bbb;}
-        footer p{max-width:1000px;margin:auto;line-height:1.7;}
-
-        /* ================= MOBILE RESPONSIVE ================= */
-    @media (max-width: 768px) {
-  body {
-    flex-direction: column !important;
-    height: auto;
-  }
-  .sidebar {
-    flex-direction: row !important;
-    flex-wrap: wrap;
-    width: 100%;
-    padding: 12px 20px !important;
-    gap: 8px;
-    justify-content: center;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-bottom: 1px solid rgba(255,65,108,0.2);
-  }
-  .sidebar h2 {
-    display: none !important;
-  }
-  .sidebar button {
-    padding: 10px 14px !important;
-    font-size: 13px !important;
-    min-width: 75px;
-    white-space: nowrap;
-  }
-  .profile-mini {
-    order: -1;
-    margin-right: auto;
-  }
-  .search-center input {
-    width: 90vw;
-    max-width: 350px;
-  }
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 12px;
-  }
-  .main {
-    overflow-y: auto;
-  }
-  .card img {
-    height: 180px;
-  }
-  home h1 {
-    font-size: 32px !important;
-  }
-}
-
-        @media(max-width:600px){
-            .content-area,
-.sidebar {
-  -webkit-overflow-scrolling: touch;
-}
-
-            #home h1{font-size:36px;}
-            .grid{grid-template-columns:repeat(2,1fr);}
-            .card img{height:200px;}
-            .home-buttons{flex-direction:column;align-items:center;}
+        :root {
+            --accent: #ff416c;
+            --accent-gradient: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            --glass-bg: rgba(10, 10, 18, 0.85);
+            --border-glow: rgba(255, 65, 108, 0.3);
         }
 
-        /* ================= ANIMATIONS ================= */
-        .loading{opacity:0;animation:fadeIn 0.6s ease forwards;}
-        @keyframes fadeIn{to{opacity:1;transform:translateY(0);}}
-        .skeleton{background:linear-gradient(90deg,#1a1a1a 25%,#2a2a2a 50%,#1a1a1a 75%);background-size:200% 100%;animation:skeleton 1.5s infinite;}
-        @keyframes skeleton{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        body { background-color: #08080c; color: #fff; margin: 0; overflow-x: hidden; }
+        h1, h2, h3 { font-family: 'Poppins', sans-serif; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #08080c; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        .bg-mesh {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 65, 108, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 210, 255, 0.08) 0%, transparent 40%);
+            animation: pulse 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+
+        .glass-sidebar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .anime-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+
+        .anime-card:hover {
+            transform: translateY(-12px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(255, 65, 108, 0.2);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .anime-card img { width: 100%; height: 320px; object-fit: cover; transition: 0.5s ease; }
+        .anime-card:hover img { transform: scale(1.05); }
+
+        .rating-star { cursor: pointer; transition: color 0.2s; color: #333; }
+        .rating-star.active { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.4); }
+
+        .active-nav { background: var(--accent-gradient); box-shadow: 0 0 25px var(--border-glow); }
+
+        .skeleton {
+            background: linear-gradient(90deg, #0d0d15 25%, #1a1a2a 50%, #0d0d15 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        .section-content { display: none; }
+        .section-content.active { display: block; animation: fadeIn 0.6s ease-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hero-glow {
+            text-shadow: 0 0 30px rgba(255, 65, 108, 0.6);
+        }
     </style>
 </head>
-<body>
-    <div class="bg-animation"></div>
+<body class="flex flex-col md:flex-row min-h-screen">
+    <div class="bg-mesh"></div>
 
-    <!-- ========== SIDEBAR - UPDATED ========== -->
-    <div class="sidebar">
-        <h2>OtakuLog</h2>
-        <div class="profile-mini" id="profileMini"><!-- Dynamic profile --></div>
-        <button class="active" onclick="showPage('home',this)">🏠 Home</button>
-        <button onclick="showPage('anime',this)">📺 Anime</button>
-        <button onclick="showPage('manga',this)">📚 Manga</button>
-        <button onclick="showPage('recipes',this)">🍜 Recipes</button>
-        <button onclick="showPage('suggestions',this)">💡 Suggestions</button>
-        <button onclick="showPage('news',this)">📰 News</button>
-        <button onclick="showPage('stats',this)">📊 Stats</button>
-        <button onclick="showPage('about',this)">ℹ️ About</button>
-        <button onclick="fact()">✏️ Facts</button>
-        <button onclick="toggleTheme()">🌙 Theme</button>
-    </div>
-
-    <div class="main">
-        <div class="main-header">
-            <h2 id="pageTitle">Welcome to OtakuLog</h2>
+    <aside class="glass-sidebar w-full md:w-72 md:h-screen sticky top-0 flex flex-col p-6 z-50 overflow-y-auto">
+        <div class="mb-10 text-center">
+            <h2 class="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500">
+                OTAKULOG
+            </h2>
+            <p class="text-[9px] uppercase tracking-[0.3em] text-gray-400 mt-2 font-bold">Pro Level Tracker</p>
         </div>
 
-        <div class="content-area">
-            <!-- ========== HOME PAGE - CLEAN ========== -->
-            <section id="home" class="active">
-                <h1>OtakuLog</h1>
-                <p>Your ultimate anime & manga tracking platform. Discover, organize, and explore thousands of stories with personalized recommendations and beautiful visualizations.</p>
-                <div class="home-buttons">
-                    <button onclick="showPage('anime',document.querySelectorAll('.sidebar button')[2])">Explore Anime</button>
-                    <button onclick="showPage('manga',document.querySelectorAll('.sidebar button')[3])">Explore Manga</button>
-                    <button onclick="showPage('recipes',document.querySelectorAll('.sidebar button')[4])">🍜 Food Recipes</button>
-                </div>
-            </section>
+        <nav class="flex-1 space-y-2">
+            <button onclick="showSection('home')" class="nav-btn active-nav w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all">
+                <i class="fa-solid fa-house-chimney"></i> <span class="font-semibold">Home</span>
+            </button>
+            <button onclick="showSection('discover')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
+                <i class="fa-solid fa-play"></i> <span class="font-semibold">Anime Database</span>
+            </button>
+            <button onclick="showSection('manga')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
+                <i class="fa-solid fa-book-open"></i> <span class="font-semibold">Manga Vault</span>
+            </button>
+            <button onclick="showSection('watchlist')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
+                <i class="fa-solid fa-heart"></i> <span class="font-semibold">My Collection</span>
+            </button>
+            <button onclick="showSection('news')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
+                <i class="fa-solid fa-bolt"></i> <span class="font-semibold">Industry News</span>
+            </button>
+            <button onclick="showSection('recipes')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
+                <i class="fa-solid fa-utensils"></i> <span class="font-semibold">Sanji's Cookbook</span>
+            </button>
+            <button onclick="showSection('travel')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
+                <i class="fa-solid fa-map-location-dot"></i> <span class="font-semibold">Pilgrimage</span>
+            </button>
+            <button onclick="showSection('stats')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
+                <i class="fa-solid fa-chart-pie"></i> <span class="font-semibold">User Stats</span>
+            </button>
+            <button onclick="showSection('about')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
+                <i class="fa-solid fa-user-ninja"></i> <span class="font-semibold">The Creator</span>
+            </button>
+        </nav>
 
-            <!-- ================= ANIME SECTION ================= -->
-            <section id="anime">
-                <div class="search-center">
-                    <input id="animeInput" placeholder="Search anime by title, genre, or studio...">
-                    <button class="icon" onclick="searchAnime()">🔍</button>
-                    <div class="suggested">
-                        <span onclick="genreAnime(30)">⚽ Sports</span>
-                        <span onclick="genreAnime(62)">🌌 Isekai</span>
-                        <span onclick="genreAnime(22)">💕 Romance</span>
-                        <span onclick="genreAnime(10)">🪄 Fantasy</span>
-                        <span onclick="topAnime()">⭐ Popular</span>
-                        <span onclick="studioAnime('MAPPA')">MAPPA</span>
-                        <span onclick="filterByEpisodesRange(1,12)">📺 ≤12 EP</span>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
-                        <input id="epInput" type="number" placeholder="Max episodes" style="padding:12px 16px;width:200px;border-radius:8px;border:1px solid rgba(255,65,108,0.3);background:rgba(26,26,26,0.8);color:white;">
-                        <button class="icon" onclick="searchByEpisodeCount()">🎯</button>
-                    </div>
-                </div>
-                <h3>Search Results</h3>
-                <div id="animeGrid" class="grid"></div>
-                <h3>✅ Watched</h3>
-                <div id="watchedGrid" class="grid"></div>
-                <h3>➕ Plan to Watch</h3>
-                <div id="planGrid" class="grid"></div>
-            </section>
+        <div id="stats-mini" class="mt-8 p-5 bg-white/5 rounded-3xl border border-white/10">
+            <p class="text-[10px] text-gray-500 uppercase font-bold mb-3">Goal Progress</p>
+            <div class="flex justify-between items-end mb-2">
+                <span id="count-watched" class="text-2xl font-black text-red-500">0</span>
+                <span class="text-[10px] text-gray-500">Total Saved</span>
+            </div>
+            <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-gradient-to-r from-red-500 to-pink-500 h-full transition-all duration-700" style="width: 0%"></div>
+            </div>
+        </div>
+    </aside>
 
-            <!-- ================= MANGA SECTION ================= -->
-            <section id="manga">
-                <div class="search-center">
-                    <input id="mangaInput" placeholder="Search manga, manhwa, manhua...">
-                    <button class="icon" onclick="searchManga()">🔍</button>
-                    <div class="suggested">
-                        <span onclick="mangaGenre(22)">💕 Romance</span>
-                        <span onclick="mangaGenre(10)">🪄 Fantasy</span>
-                        <span onclick="searchMangaType('manhwa')">🇰🇷 Korean</span>
-                        <span onclick="searchMangaType('manhua')">🇨🇳 Chinese</span>
-                        <span onclick="topManga()">⭐ Popular</span>
-                    </div>
-                </div>
-                <h3>Search Results</h3>
-                <div id="mangaGrid" class="grid"></div>
-                <h3>📖 Reading</h3>
-                <div id="readingGrid" class="grid"></div>
-                <h3>✅ Read</h3>
-                <div id="readGrid" class="grid"></div>
-                <h3>➕ Plan to Read</h3>
-                <div id="planReadGrid" class="grid"></div>
-            </section>
-
-            <!-- ================= RECIPES SECTION - NEW ================= -->
-            <section id="recipes">
-                <h2>🍜 Anime Food Recipes</h2>
-                <p style="color:#ccc;font-size:15px;max-width:800px;margin:0 auto 30px;">Recreate iconic dishes from your favorite anime series</p>
-                <div id="recipesGrid" class="grid"></div>
-            </section>
-
-            <!-- ================= SUGGESTIONS SECTION - UPDATED ================= -->
-            <section id="suggestions">
-                <h2>📱 Where to Watch</h2>
-                <div class="grid">
-                    <div class="card">
-                        <h4>🌟 Crunchyroll</h4>
-                        <p>Official anime streaming with simulcasts and premium library</p>
-                        <div class="buttons">
-                            <a href="https://www.crunchyroll.com" target="_blank"><button class="icon">🌐</button></a>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <h4>📺 Netflix Anime</h4>
-                        <p>High-quality originals and licensed anime series</p>
-                        <div class="buttons">
-                            <a href="https://www.netflix.com/browse/genre/7424" target="_blank"><button class="icon">🌐</button></a>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <h4>🛒 Amazon Prime Video</h4>
-                        <p>Wide anime selection including exclusives and dubs</p>
-                        <div class="buttons">
-                            <a href="https://www.primevideo.com" target="_blank"><button class="icon">🌐</button></a>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <h4>📡 JioCinema</h4>
-                        <p>Indian streaming platform with popular anime titles</p>
-                        <div class="buttons">
-                            <a href="https://www.jiocinema.com" target="_blank"><button class="icon">🌐</button></a>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <h4>📖 Manga Plus</h4>
-                        <p>Official Shueisha platform with simultaneous releases</p>
-                        <div class="buttons">
-                            <a href="https://mangaplus.shueisha.co.jp" target="_blank"><button class="icon">📚</button></a>
-                        </div>
+    <main class="flex-1 min-h-screen relative overflow-y-auto">
+        
+        <!-- SECTION: HOME -->
+        <section id="sec-home" class="section-content active p-6 md:p-10">
+            <div class="relative h-[550px] rounded-[48px] overflow-hidden mb-16 flex items-center px-10 md:px-20 group">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578632738980-43318b5c9476?auto=format&fit=crop&q=80')] bg-cover bg-center transition-transform duration-1000 group-hover:scale-110"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
+                
+                <div class="relative max-w-3xl z-10">
+                    <span class="bg-red-500 text-white px-5 py-2 rounded-full text-xs font-black mb-8 inline-block uppercase tracking-widest shadow-lg shadow-red-500/30">Feature Highlight</span>
+                    <h1 class="text-6xl md:text-8xl font-black mb-8 leading-tight hero-glow">DISCOVER<br><span class="text-red-500 italic">IMMERSE.</span></h1>
+                    <p class="text-gray-300 mb-10 text-xl max-w-xl leading-relaxed">The ultimate companion for every Otaku. Real-time data from Jikan v4, industry news, and community ratings.</p>
+                    <div class="flex gap-6">
+                        <button onclick="showSection('discover')" class="bg-white text-black px-12 py-5 rounded-2xl font-black hover:bg-red-500 hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-2xl">Start Exploring</button>
+                        <button onclick="showSection('recipes')" class="bg-white/10 backdrop-blur-3xl px-12 py-5 rounded-2xl font-black border border-white/20 hover:bg-white/20 transition-all">Anime Food</button>
                     </div>
                 </div>
+            </div>
 
-                <h2>✈️ Travel Spots</h2>
-                <div id="travelGrid" class="grid"></div>
-            </section>
-            <!-- ================= NEWS SECTION ================= -->
-            <section id="news">
-                <h2>📰 Latest Anime News</h2>
-                <p style="color:#ccc;font-size:15px;max-width:800px;margin:0 auto 30px;">Updates from the anime industry with real-time data</p>
-                <div id="animeNews" class="grid"></div>
-                <h2>📺 Currently Airing</h2>
-                <div id="airingGrid" class="grid"></div>
-                <h2>🔥 Upcoming Releases</h2>
-                <div id="upcomingGrid" class="grid"></div>
-            </section>
-
-            <!-- ================= STATS DASHBOARD ================= -->
-            <section id="stats">
-                <h2>📊 Your Stats</h2>
-                <div class="grid">
-                    <div class="card" style="text-align:center;">
-                        <h4>📺 Anime Watched</h4><p id="statWatched" style="font-size:32px;color:#ff416c;font-weight:700;margin:10px 0;">0</p>
-                    </div>
-                    <div class="card" style="text-align:center;">
-                        <h4>➕ Plan to Watch</h4><p id="statPlan" style="font-size:32px;color:#ff416c;font-weight:700;margin:10px 0;">0</p>
-                    </div>
-                    <div class="card" style="text-align:center;">
-                        <h4>📖 Manga Reading</h4><p id="statReading" style="font-size:32px;color:#ff416c;font-weight:700;margin:10px 0;">0</p>
-                    </div>
-                    <div class="card" style="text-align:center;">
-                        <h4>✅ Manga Read</h4><p id="statRead" style="font-size:32px;color:#ff416c;font-weight:700;margin:10px 0;">0</p>
-                    </div>
+            <div class="mb-16">
+                <div class="flex justify-between items-center mb-10">
+                    <h2 class="text-4xl font-black italic">TOP PICKS <span class="text-red-500">2024</span></h2>
+                    <button onclick="showSection('discover')" class="text-red-500 hover:text-red-400 font-black flex items-center gap-3 group">
+                        Browse All <i class="fa-solid fa-chevron-right group-hover:translate-x-1 transition-all"></i>
+                    </button>
                 </div>
-            </section>
+                <div id="home-trending-grid" class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+                    <!-- API Data -->
+                </div>
+            </div>
 
-             <!-- ================= FACTS SECTION ================= -->
-        <section id="facts">
-            <h2>🌟 Anime Facts </h2>
-
-                <div class="card">
-                    <h4>🇮🇳 India Anime Watch</h4>
-                    <p>Indian manga & anime projects to support!</p>
-                    <ul style="text-align:left;padding-left:20px;color:#ccc;">
-                        <li><b>Kabir</b> - India's first anime (upcoming)</li>
-                        <li><b>Ganga</b> - Mythological manga series</li>
-                        <li><b>Ramayana 3D</b> - Animated epic</li>
-                        <li><b>Chhota Bheem</b> - Global anime-style hit</li>
-                        <li><b>Karmachakra</b> indian anime </li>
-                        <li><b>https://cosmics.co.in/?srsltid=AfmBOooMBPtShfYO-je_umHhkWAhWhxlvZrzAj3DrnAQyGxEIPlJPfBI</b> - Indian Manga/ comics</li>
-                        li><b>https://www.qissacomics.com/</b> - indian sports manga</li>
-                    </ul>
+            <div class="mb-16">
+                <h3 class="text-3xl font-black mb-10 flex items-center gap-4 uppercase"><i class="fa-solid fa-masks-theater text-pink-500"></i> Mood Navigator</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <button onclick="fetchMood('hype')" class="p-8 bg-orange-600/10 border border-orange-500/20 rounded-[32px] hover:border-orange-500 transition-all text-left group">
+                        <span class="text-5xl block mb-4 group-hover:scale-110 transition-transform">🔥</span>
+                        <span class="font-black text-2xl uppercase italic">Hype</span>
+                        <p class="text-sm text-gray-500 mt-2">Action, Sports, Shonen</p>
+                    </button>
+                    <button onclick="fetchMood('sad')" class="p-8 bg-blue-600/10 border border-blue-500/20 rounded-[32px] hover:border-blue-500 transition-all text-left group">
+                        <span class="text-5xl block mb-4 group-hover:scale-110 transition-transform">😢</span>
+                        <span class="font-black text-2xl uppercase italic">Sadness</span>
+                        <p class="text-sm text-gray-500 mt-2">Drama, Tragedy, Romance</p>
+                    </button>
+                    <button onclick="fetchMood('smart')" class="p-8 bg-purple-600/10 border border-purple-500/20 rounded-[32px] hover:border-purple-500 transition-all text-left group">
+                        <span class="text-5xl block mb-4 group-hover:scale-110 transition-transform">🧠</span>
+                        <span class="font-black text-2xl uppercase italic">Psych</span>
+                        <p class="text-sm text-gray-500 mt-2">Mystery, Psychological</p>
+                    </button>
+                    <button onclick="fetchMood('chill')" class="p-8 bg-green-600/10 border border-green-500/20 rounded-[32px] hover:border-green-500 transition-all text-left group">
+                        <span class="text-5xl block mb-4 group-hover:scale-110 transition-transform">🍃</span>
+                        <span class="font-black text-2xl uppercase italic">Chill</span>
+                        <p class="text-sm text-gray-500 mt-2">Slice of Life, Comedy</p>
+                    </button>
                 </div>
             </div>
         </section>
 
-        <!-- ================= ABOUT SECTION ================= -->
-        <section id="about">
-            <div class="about-content">
-                <div class="about-card">
-                    <h2>👋 Welcome to OtakuLog</h2>
-                    <p style="font-size:18px;color:#ccc;line-height:1.7;">
-                        Built by <strong>Rayaan</strong> - A curious creator exploring anime, storytelling, and web development—one project at a time from Bengaluru,Karnataka. 
-                        I created OtakuLog to solve my own problem: keeping track of my endless anime & manga watchlist!
-                        I’m an anime enthusiast who wanted to build an interactive web experiences. I like experimenting with ideas, learning new concepts, and improving through hands-on projects. OtakuLog is a personal project where I combined frontend development, design, and anime culture into a single evolving platform.
-                    </p>
-                </div>
+        <section id="sec-discover" class="section-content p-10">
+            <div class="mb-12 text-center">
+                <h2 class="text-6xl font-black mb-4 italic uppercase">Global Database</h2>
+                <p class="text-gray-400 text-lg">Querying the MyAnimeList Core Infrastructure</p>
+            </div>
 
-                <div class="about-card">
-                    <h3>🚀 How OtakuLog Works</h3>
-                    <div class="feature-grid">
-                        <div class="feature-card">
-                            <h4>📱 One-Click Tracking</h4>
-                            <p>Add to Watched/Plan with single tap</p>
-                        </div>
-                        <div class="feature-card">
-                            <h4>🧠 Smart Recommendations</h4>
-                            <p>AI analyzes your taste for perfect suggestions</p>
-                        </div>
-                        <div class="feature-card">
-                            <h4>🎮 Interactive Games</h4>
-                            <p>Test your otaku knowledge daily</p>
-                        </div>
-                        <div class="feature-card">
-                            <h4>🍜 Real Recipes</h4>
-                            <p>Cook anime food in your kitchen</p>
-                        </div>
-                    </div>
+            <div class="max-w-4xl mx-auto mb-16 flex gap-5">
+                <div class="flex-1 relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-6 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" id="anime-search-input" placeholder="Enter series title..." class="w-full bg-white/5 border border-white/10 rounded-3xl py-6 pl-16 pr-8 focus:border-red-500 focus:ring-4 focus:ring-red-500/10 outline-none transition-all text-xl font-medium">
                 </div>
+                <button onclick="performSearch('anime')" class="bg-red-500 px-14 py-6 rounded-3xl font-black text-xl hover:shadow-2xl shadow-red-500/40 transition-all active:scale-95">FIND</button>
+            </div>
 
-                <div class="about-card">
-                    <h3>📈 Coming Soon</h3>
-                    <ul style="color:#ccc;font-size:16px;">
-                        <li>🛍️ <strong>Anime Merch Store</strong> - Official figures, posters & apparel</li>
-                        <li>🎭 <strong>Comic-Con Calendar</strong> - India cosplay events</li>
-                        <li>😊 <strong>Mood-Based Suggestions</strong> - Feeling sad? Watch this!</li>
-                        <li>🤖 <strong>AI Character Generator</strong> - Create your waifu/husbando or yourself</li>
-                        <li>🤖 <strong>This or That Anime</strong> - chose your fav anime</li>
-                       <li>🤖 <strong>Anime quiz/ guess the character</strong> - whos that guy/girl?</li>
-                    </ul>
+            <div id="anime-search-results" class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+                <!-- Results -->
+            </div>
+        </section>
+
+        <!-- SECTION: MANGA -->
+        <section id="sec-manga" class="section-content p-10">
+            <div class="mb-12 text-center">
+                <h2 class="text-6xl font-black mb-4 italic uppercase">Manga Vault</h2>
+                <p class="text-gray-400 text-lg">Manhwa, Manhua, and Light Novels</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto mb-16 flex gap-5">
+                <div class="flex-1 relative">
+                    <i class="fa-solid fa-book-bookmark absolute left-6 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" id="manga-search-input" placeholder="Search volumes..." class="w-full bg-white/5 border border-white/10 rounded-3xl py-6 pl-16 pr-8 focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 outline-none transition-all text-xl font-medium">
                 </div>
+                <button onclick="performSearch('manga')" class="bg-pink-600 px-14 py-6 rounded-3xl font-black text-xl hover:shadow-2xl shadow-pink-500/40 transition-all active:scale-95">READ</button>
+            </div>
 
-                <div class="about-card" style="text-align:center;">
-                    <h3>📲 Connect With Me</h3>
-                    <p style="font-size:20px;margin:20px 0;">
-                        <a href="https://instagram.com/the_rayaan_k" target="_blank" style="color:#ff416c;font-weight:700;text-decoration:none;">
-                            Instagram: @the_rayaan_k ✨
-                        </a>
-                    </p>
-                    <p style="color:#aaa;">Made with ❤️ in Bangalore, India</p>
+            <div id="manga-search-results" class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+                <!-- Results -->
+            </div>
+        </section>
+
+        <!-- SECTION: WATCHLIST -->
+        <section id="sec-watchlist" class="section-content p-10">
+            <div class="flex justify-between items-end mb-16 border-b border-white/10 pb-10">
+                <div>
+                    <h2 class="text-5xl font-black italic uppercase">The Private Library</h2>
+                    <p class="text-gray-400 text-lg mt-3">Curated items saved to your browser's persistent storage.</p>
+                </div>
+            </div>
+            <div id="watchlist-grid" class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+                <!-- Saved items -->
+            </div>
+        </section>
+
+        <!-- SECTION: NEWS -->
+        <section id="sec-news" class="section-content p-10">
+            <h2 class="text-5xl font-black mb-12 italic uppercase">Industry Radar</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
+                <div class="lg:col-span-2">
+                    <h3 class="text-2xl font-black mb-8 flex items-center gap-3"><i class="fa-solid fa-signal text-green-500"></i> Airing This Week</h3>
+                    <div id="airing-now-grid" class="grid grid-cols-2 md:grid-cols-3 gap-6"></div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-black mb-8 flex items-center gap-3"><i class="fa-solid fa-hourglass-start text-blue-500"></i> Most Anticipated</h3>
+                    <div id="upcoming-list" class="space-y-5"></div>
                 </div>
             </div>
         </section>
-    </div>
+
+        <section id="sec-recipes" class="section-content p-10">
+            <h2 class="text-5xl font-black mb-4 italic uppercase">Sanji's Legendary Kitchen</h2>
+            <p class="text-gray-400 mb-12 text-lg">Recreate the masterpieces of the straw-hat chef.</p>
+            <div id="recipes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Recipes injected here -->
+            </div>
+        </section>
+
+        <section id="sec-travel" class="section-content p-10">
+            <h2 class="text-5xl font-black mb-4 italic uppercase">Anime Pilgrimage</h2>
+            <p class="text-gray-400 mb-12 text-lg">Real-life landmarks that inspired the greatest scenes.</p>
+            <div id="travel-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Travel cards injected here -->
+            </div>
+        </section>
+
+        <!-- SECTION: STATS -->
+        <section id="sec-stats" class="section-content p-10">
+            <h2 class="text-5xl font-black mb-12 italic uppercase">System Diagnostics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white/5 border border-white/10 p-10 rounded-[40px] text-center group transition-all hover:bg-white/10">
+                    <p class="text-gray-500 uppercase text-xs font-black tracking-widest mb-4">Total Vault</p>
+                    <h3 id="stat-total" class="text-7xl font-black text-red-500 group-hover:scale-110 transition-transform">0</h3>
+                </div>
+                <div class="bg-white/5 border border-white/10 p-10 rounded-[40px] text-center group transition-all hover:bg-white/10">
+                    <p class="text-gray-500 uppercase text-xs font-black tracking-widest mb-4">Anime Items</p>
+                    <h3 id="stat-anime" class="text-7xl font-black text-blue-500 group-hover:scale-110 transition-transform">0</h3>
+                </div>
+                <div class="bg-white/5 border border-white/10 p-10 rounded-[40px] text-center group transition-all hover:bg-white/10">
+                    <p class="text-gray-500 uppercase text-xs font-black tracking-widest mb-4">Manga Items</p>
+                    <h3 id="stat-manga" class="text-7xl font-black text-pink-500 group-hover:scale-110 transition-transform">0</h3>
+                </div>
+                <div class="bg-white/5 border border-white/10 p-10 rounded-[40px] text-center group transition-all hover:bg-white/10">
+                    <p class="text-gray-500 uppercase text-xs font-black tracking-widest mb-4">Avg Taste</p>
+                    <h3 id="stat-rating" class="text-7xl font-black text-yellow-500 group-hover:scale-110 transition-transform">0.0</h3>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-about" class="section-content p-6 md:p-10 max-w-5xl mx-auto">
+            <div class="bg-white/5 border border-white/10 rounded-[64px] p-10 md:p-16 relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 text-[200px] opacity-[0.03] select-none rotate-12">STUDENT</div>
+                <h2 class="text-5xl md:text-6xl font-black mb-8 italic uppercase tracking-tighter">Meet the <span class="text-red-500">Architect</span></h2>
+                
+                <div class="space-y-8 text-xl text-gray-300 leading-relaxed font-light">
+                    <p>
+                        Hey there! I'm <span class="text-white font-black">Rayaan</span>, a hardcore Anime enthusiast and an <span class="text-blue-400 font-bold">Engineering Student at Dayananda Sagar University (DSU)</span> in Bengaluru. 
+                    </p>
+                    <p>
+                        My world exists at the intersection of <span class="italic text-red-400">Cinematography, Mystery Writing, and Advanced Tech</span>. When I'm not grinding through engineering projects, I'm analyzing the frame composition of Ufotable animations or plotting my next mystery story.
+                    </p>
+                    <p>
+                        <span class="text-white font-bold">OtakuLog</span> was born out of my passion for <span class="font-bold">Animation and Filming</span>. I wanted to build a platform that didn't just list data, but felt as cinematic and immersive as the shows we love. This project represents my journey in combining high-end design with functional data engineering.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-16">
+                    <div class="p-8 bg-white/5 rounded-[32px] border border-white/5">
+                        <h4 class="font-black mb-4 text-red-500 flex items-center gap-3 italic uppercase"><i class="fa-solid fa-graduation-cap"></i> Academic Base</h4>
+                        <p class="text-base text-gray-400 font-medium">Currently pursuing Engineering at DSU. Merging structural logic with creative digital experiences.</p>
+                    </div>
+                    <div class="p-8 bg-white/5 rounded-[32px] border border-white/5">
+                        <h4 class="font-black mb-4 text-blue-500 flex items-center gap-3 italic uppercase"><i class="fa-solid fa-camera-retro"></i> Creative Stack</h4>
+                        <p class="text-base text-gray-400 font-medium">Filmmaking, Animation Analysis, Mystery Screenwriting, and Full-Stack Development.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-5">
+                    <a href="https://instagram.com/the_rayaan_k" target="_blank" class="bg-gradient-to-r from-red-500 to-pink-500 px-10 py-5 rounded-2xl font-black flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-red-500/30">
+                        <i class="fa-brands fa-instagram text-xl"></i> Follow @the_rayaan_k
+                    </a>
+                    <div class="bg-white/5 border border-white/10 px-8 py-5 rounded-2xl font-bold flex items-center gap-3 italic">
+                        <i class="fa-solid fa-location-dot text-red-500"></i> Bengaluru, IN
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed bottom-12 right-12 bg-white text-black px-10 py-6 rounded-3xl font-black transform translate-y-48 transition-all duration-500 z-[100] shadow-2xl flex items-center gap-4 italic uppercase tracking-wider">
+            <i class="fa-solid fa-circle-check text-green-600 text-2xl"></i>
+            <span id="toast-msg">Success!</span>
+        </div>
+    </main>
 
     <script>
-        // ================= GLOBAL STATE =================
-        let animeData=[], mangaData=[];
-        let watched=[], plan=[], reading=[], read=[], planRead=[];
-        let store = {profile:{username:"Otaku",avatar:"🦊"}, anime:{watched:[],plan:[]}, manga:{reading:[],read:[],plan:[]}};
-        const STORAGE_KEY = "otakulog-data-v2";
-        const JIKAN_BASE = "https://api.jikan.moe/v4";
-
-        // ================= RECIPES & TRAVEL DATA =================
-        const animeRecipes = [
-            {title:"🍲 Sanji's Okonomiyaki", img:"https://via.placeholder.com/220x280/FF416C/FFFFFF?text=Okonomiyaki", desc:"One Piece classic street food", url:"https://itadakimasuanime.wordpress.com/recipes/okonomiyaki/"},
-            {title:"🍜 Tanjiro's Udon", img:"https://via.placeholder.com/220x280/FF6B9D/FFFFFF?text=Udon", desc:"Demon Slayer comfort noodles", url:"https://itadakimasuanime.wordpress.com/recipes/udon/"},
-            {title:"🍙 Onigiri", img:"https://via.placeholder.com/220x280/FF416C/FFFFFF?text=Onigiri", desc:"Pokémon & Naruto rice balls", url:"https://itadakimasuanime.wordpress.com/recipes/onigiri/"},
-            {title:"🍡 Mochi", img:"https://via.placeholder.com/220x280/FF4B6D/FFFFFF?text=Mochi", desc:"Spirited Away sweet treat", url:"https://itadakimasuanime.wordpress.com/recipes/mochi/"},
-            {title:"🍖 Yakitori", img:"https://via.placeholder.com/220x280/FF6B9D/FFFFFF?text=Yakitori", desc:"Grilled chicken skewers", url:"https://itadakimasuanime.wordpress.com/recipes/yakitori/"},
-            {title:"🍮 Purin", img:"https://via.placeholder.com/220x280/FF416C/FFFFFF?text=Purin", desc:"Toradora creamy pudding", url:"https://itadakimasuanime.wordpress.com/recipes/purin/"}
-        ];
-
-        const animeTravelSpots = [
-            {title:"🗼 Tokyo Tower (Attack on Titan)", img:"https://via.placeholder.com/220x280/4ECDC4/FFFFFF?text=Tokyo+Tower", desc:"Iconic orange tower in Minato", url:"https://www.tokyotower.co.jp/en/"},
-            {title:"🌸 Shibuya Crossing (Various)", img:"https://via.placeholder.com/220x280/44A08D/FFFFFF?text=Shibuya", desc:"World's busiest intersection", url:"https://www.shibuya.sc/"},
-            {title:"⛩️ Fushimi Inari (Inuyasha)", img:"https://via.placeholder.com/220x280/4ECDC4/FFFFFF?text=Fushimi+Inari", desc:"1000 red torii gates", url:"https://inari.jp/en/"},
-            {title:"🏯 Himeji Castle (Various)", img:"https://via.placeholder.com/220x280/44A08D/FFFFFF?text=Himeji", desc:"Japan's most beautiful castle", url:"https://www.himejicastle.jp/en/"},
-            {title:"🌊 Itsukushima Shrine (Spirited Away)", img:"https://via.placeholder.com/220x280/4ECDC4/FFFFFF?text=Miyajima", desc:"Floating torii gate", url:"https://www.miyajima.or.jp/english/"},
-            {title:"🚅 Akihabara (Lucky Star)", img:"https://via.placeholder.com/220x280/44A08D/FFFFFF?text=Akihabara", desc:"Anime & electronics district", url:"https://akihabara-trip.jp/"}
-        ];
-
-        // ================= STORAGE SYSTEM =================
-        function loadStore(){
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if(saved) store = JSON.parse(saved);
-            watched = store.anime.watched || [];
-            plan = store.anime.plan || [];
-            reading = store.manga.reading || [];
-            read = store.manga.read || [];
-            planRead = store.manga.plan || [];
-            return store;
-        }
-        function saveStore(){
-            store.anime.watched = watched;
-            store.anime.plan = plan;
-            store.manga.reading = reading;
-            store.manga.read = read;
-            store.manga.plan = planRead;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
-        }
-
-        // ================= PAGE NAVIGATION - FIXED =================
-        function showPage(id, btn){
-            document.querySelectorAll("section").forEach(sec => {
-                sec.style.display = "none";
-                sec.classList.remove("active","loading");
-            });
-            const target = document.getElementById(id);
-            if(target){
-                target.style.display = "block";
-                target.classList.add("active","loading");
-                setTimeout(()=>target.classList.remove("loading"), 600);
-            }
-            document.querySelectorAll(".sidebar button").forEach(b => b.classList.remove("active"));
-            if(btn) btn.classList.add("active");
-            document.getElementById("pageTitle").textContent = btn ? btn.textContent : "OtakuLog";
-            
-            if(id === "anime") loadAnimeHome();
-            if(id === "manga") loadMangaHome();
-            if(id === "news") loadNews();
-            if(id === "recipes") renderRecipes();
-            if(id === "suggestions") renderTravelSpots();
-        }
-
-        // ================= RENDER FUNCTIONS =================
-        function renderAnime(grid, data, actions=false, source="anime"){
-            grid.innerHTML = data.map((a,i) => `
-                <div class="card">
-                    <img src="${a.images?.jpg?.image_url || '/placeholder.svg'}" alt="${a.title}" loading="lazy">
-                    <h4>${a.title}</h4>
-                    <p>${a.synopsis?.substring(0,120) || "No description available."}${a.synopsis && a.synopsis.length > 120 ? "..." : ""}</p>
-                    ${actions ? `
-                        <div class="buttons">
-                            <button class="icon" onclick="addWatched(${i})" title="Mark as Watched">✔</button>
-                            <button class="icon" onclick="addPlan(${i})" title="Plan to Watch">➕</button>
-                        </div>
-                    ` : ""}
-                    ${source !== "anime" ? `
-                        <div class="buttons">
-                            <button class="icon remove" onclick="removeItem('${source}',${i})" title="Remove">🗑</button>
-                        </div>
-                    ` : ""}
-                </div>
-            `).join("");
-        }
-
-        function renderManga(grid, data, source){
-            grid.innerHTML = data.map((m,i) => `
-                <div class="card">
-                    <img src="${m.images?.jpg?.image_url || '/placeholder.svg'}" alt="${m.title}" loading="lazy">
-                    <h4>${m.title}</h4>
-                    <p>${m.synopsis?.substring(0,120) || "No description available."}${m.synopsis && m.synopsis.length > 120 ? "..." : ""}</p>
-                    ${source === "search" ? `
-                        <div class="buttons">
-                            <button class="icon" onclick="addReading(${i})" title="Reading">📖</button>
-                            <button class="icon" onclick="addRead(${i})" title="Read">✔</button>
-                            <button class="icon" onclick="addPlanRead(${i})" title="Plan to Read">➕</button>
-                        </div>
-                    ` : ""}
-                    ${source !== "search" ? `
-                        <div class="buttons">
-                            <button class="icon remove" onclick="removeItem('${source}',${i})" title="Remove">🗑</button>
-                        </div>
-                    ` : ""}
-                </div>
-            `).join("");
-        }
-
-        // ================= NEW FEATURES =================
-        function renderRecipes(){
-            const grid = document.getElementById("recipesGrid");
-            grid.innerHTML = animeRecipes.map((r,i) => `
-                <div class="card">
-                    <img src="${r.img}" alt="${r.title}" loading="lazy">
-                    <h4>${r.title}</h4>
-                    <p>${r.desc}</p>
-                    <div class="buttons">
-                        <a href="${r.url}" target="_blank"><button class="icon">🍳</button></a>
-                        <button class="icon remove" onclick="animeRecipes.splice(${i},1);renderRecipes();" title="Remove">🗑</button>
-                    </div>
-                </div>
-            `).join("");
-        }
-
-        function renderTravelSpots(){
-            const grid = document.getElementById("travelGrid");
-            grid.innerHTML = animeTravelSpots.map((spot,i) => `
-                <div class="card">
-                    <img src="${spot.img}" alt="${spot.title}" loading="lazy">
-                    <h4>${spot.title}</h4>
-                    <p>${spot.desc}</p>
-                    <div class="buttons">
-                        <a href="${spot.url}" target="_blank"><button class="icon">🗺️</button></a>
-                    </div>
-                </div>
-            `).join("");
-        }
-
-        // ================= LIST MANAGEMENT =================
-        function addWatched(i){if(!watched.some(x => x.mal_id === animeData[i].mal_id)) watched.push(animeData[i]);update();}
-        function addPlan(i){if(!plan.some(x => x.mal_id === animeData[i].mal_id)) plan.push(animeData[i]);update();}
-        function addReading(i){if(!reading.some(x => x.mal_id === mangaData[i].mal_id)) reading.push(mangaData[i]);update();}
-        function addRead(i){if(!read.some(x => x.mal_id === mangaData[i].mal_id)) read.push(mangaData[i]);update();}
-        function addPlanRead(i){if(!planRead.some(x => x.mal_id === mangaData[i].mal_id)) planRead.push(mangaData[i]);update();}
-        function removeItem(type,i){
-            if(type === "watched") watched.splice(i,1);
-            if(type === "plan") plan.splice(i,1);
-            if(type === "reading") reading.splice(i,1);
-            if(type === "read") read.splice(i,1);
-            if(type === "planRead") planRead.splice(i,1);
-            update();
-        }
-
-        function update(){
-            renderAnime(watchedGrid, watched, false, "watched");
-            renderAnime(planGrid, plan, false, "plan");
-            renderManga(readingGrid, reading, "reading");
-            renderManga(readGrid, read, "read");
-            renderManga(planReadGrid, planRead, "planRead");
-            updateStats();
-            saveStore();
-        }
-
-        function updateStats(){
-            document.getElementById("statWatched").textContent = watched.length;
-            document.getElementById("statPlan").textContent = plan.length;
-            document.getElementById("statReading").textContent = reading.length;
-            document.getElementById("statRead").textContent = read.length;
-        }
-
-        // ================= API FUNCTIONS =================
-        async function safeFetch(url){
-            try{
-                const response = await fetch(url);
-                if(!response.ok) throw new Error('API error');
-                return await response.json();
-            }catch(e){
-                console.error('API Error:', e);
-                return {data:[]};
-            }
-        }
-
-        // Anime functions (keeping existing functionality)
-        async function searchAnime(){const query = document.getElementById("animeInput").value.trim();if(!query) return topAnime();const data = await safeFetch(`${JIKAN_BASE}/anime?q=${encodeURIComponent(query)}&limit=16`);animeData = data.data || [];renderAnime(animeGrid, animeData, true);}
-        async function genreAnime(id){const data = await safeFetch(`${JIKAN_BASE}/anime?genres=${id}&limit=16`);animeData = data.data || [];document.getElementById("animeInput").value = `Genre: ${id}`;renderAnime(animeGrid, animeData, true);}
-        async function studioAnime(name){const data = await safeFetch(`${JIKAN_BASE}/anime?q=${encodeURIComponent(name)}&limit=16`);animeData = data.data || [];document.getElementById("animeInput").value = name;renderAnime(animeGrid, animeData, true);}
-        async function topAnime(){const data = await safeFetch(`${JIKAN_BASE}/top/anime?limit=16`);animeData = data.data || [];document.getElementById("animeInput").value = "Top Anime";renderAnime(animeGrid, animeData, true);}
-        async function loadAnimeHome(){if(!animeData.length) await topAnime();}
-
-        // Manga functions
-        async function searchManga(){const query = document.getElementById("mangaInput").value.trim();if(!query) return topManga();const data = await safeFetch(`${JIKAN_BASE}/manga?q=${encodeURIComponent(query)}&limit=16`);mangaData = data.data || [];renderManga(mangaGrid, mangaData, "search");}
-        async function mangaGenre(id){const data = await safeFetch(`${JIKAN_BASE}/manga?genres=${id}&limit=16`);mangaData = data.data || [];document.getElementById("mangaInput").value = `Genre: ${id}`;renderManga(mangaGrid, mangaData, "search");}
-        async function topManga(){const data = await safeFetch(`${JIKAN_BASE}/top/manga?limit=16`);mangaData = data.data || [];document.getElementById("mangaInput").value = "Top Manga";renderManga(mangaGrid, mangaData, "search");}
-        async function searchMangaType(type){const data = await safeFetch(`${JIKAN_BASE}/manga?q=${encodeURIComponent(type)}&limit=16`);mangaData = data.data || [];document.getElementById("mangaInput").value = type;renderManga(mangaGrid, mangaData, "search");}
-        async function loadMangaHome(){if(!mangaData.length) await topManga();}
-
-        async function loadNews(){
-            const [newsRes, airingRes, upcomingRes] = await Promise.all([
-                safeFetch(`${JIKAN_BASE}/news?limit=6`),
-                safeFetch(`${JIKAN_BASE}/seasons/now?limit=16`),
-                safeFetch(`${JIKAN_BASE}/seasons/upcoming?limit=16`)
-            ]);
-            document.getElementById("animeNews").innerHTML = (newsRes.data || []).slice(0,6).map(n => `
-                <div class="card">
-                    <h4>${n.title}</h4>
-                    <p style="font-size:13px;color:#ccc">${n.excerpt?.substring(0,100) || "Click to read more..."}</p>
-                    <div class="buttons">
-                        <a href="${n.url}" target="_blank"><button class="icon">📰</button></a>
-                    </div>
-                </div>
-            `).join("");
-            renderAnime(document.getElementById("airingGrid"), airingRes.data || [], false);
-            renderAnime(document.getElementById("upcomingGrid"), upcomingRes.data || [], false);
-        }
-
-        // ================= PROFILE SYSTEM - FIXED =================
-        const avatarOptions = ["🦊","🐺","🐉","🦁","🐼","🦅","🐱","🐲","👹","👺"];
+        const API_BASE = "https://api.jikan.moe/v4";
         
-        function renderProfiles(){
-            const profileMini = document.getElementById("profileMini");
-            profileMini.innerHTML = `
-                <div class="avatar">${store.profile.avatar}</div>
-                <h4>${store.profile.username}</h4>
-                <button onclick="editProfileFromSidebar()">✏️ Edit</button>
-            `;
-        }
+        let state = {
+            watchlist: JSON.parse(localStorage.getItem('otaku_pro_v5_watchlist')) || [],
+            ratings: JSON.parse(localStorage.getItem('otaku_pro_v5_ratings')) || {},
+            lastSearch: [],
+            currentDisplay: []
+        };
 
-        function editProfileFromSidebar(){
-            const name = prompt("Enter your username:", store.profile.username);
-            if(name && name.trim()){
-                store.profile.username = name.trim();
-                const avatar = prompt("Enter avatar emoji (or press cancel to keep current):", store.profile.avatar);
-                if(avatar) store.profile.avatar = avatar;
-                saveStore();
-                renderProfiles();
-            }
-        }
+        const staticData = {
+            recipes: [
+                { title: "🍖 Sanji's Sea King Steak", desc: "The ultimate pirate feast, slow-cooked to perfection for the crew.", img: "https://images.unsplash.com/photo-1546241072-48010ad2862c?auto=format&fit=crop&q=80", link: "https://itadakimasuanime.wordpress.com/2014/10/24/one-piece-sanjis-meat-on-the-bone/" },
+                { title: "🍜 Ichiraku Miso Ramen", desc: "Naruto's go-to comfort meal. Rich miso broth with extra chashu.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&q=80", link: "https://tasty.co/recipe/naruto-inspired-miso-ramen" },
+                { title: "🍙 Sanji's Fried Rice (Baratie)", desc: "The famous dish Sanji prepared for Gin, made with simple ingredients but immense soul.", img: "https://images.unsplash.com/photo-1512058560366-cd24270083cd?auto=format&fit=crop&q=80", link: "https://www.youtube.com/watch?v=R5p-K_M-lS0" },
+                { title: "🍚 Ponyo's Ham Ramen", desc: "A simple, heartwarming ham and egg ramen bowl for kids and sea spirits.", img: "https://images.unsplash.com/photo-1591814448473-7027b515b41e?auto=format&fit=crop&q=80", link: "https://www.allrecipes.com/recipe/262548/simple-ham-and-egg-ramen/" },
+                { title: "🦐 Sanji's Seafood Risotto", desc: "A high-end Baratie special that captures the flavor of the East Blue.", img: "https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&q=80", link: "https://www.google.com/search?q=sanji+seafood+risotto+recipe" },
+                { title: "🍛 Soma's Transforming Furikake", desc: "Food Wars classic. A dish that feels like a festival in your mouth.", img: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80", link: "https://shokugekinosoma.fandom.com/wiki/Transforming_Furikake_Rice" }
+            ],
+            travel: [
+                { title: "🌉 Your Name (Suga Shrine)", desc: "The iconic red staircase stairs from the finale of Makoto Shinkai's Your Name.", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80" },
+                { title: "🚉 Shibuya Crossing (JJK)", desc: "The heart of Tokyo and site of the legendary Shibuya Incident arc.", img: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&q=80" },
+                { title: "🗼 Tokyo Tower (AoT)", desc: "Inspired many backgrounds in early seasons and modern sci-fi anime.", img: "https://images.unsplash.com/photo-1536098565842-145119ad41a1?auto=format&fit=crop&q=80" },
+                { title: "🏞️ Hakone (Evangelion)", desc: "The real-world location for Tokyo-3 in the Neon Genesis Evangelion series.", img: "https://images.unsplash.com/photo-1528164344705-47542687990d?auto=format&fit=crop&q=80" },
+                { title: "🛀 Dogo Onsen (Spirited Away)", desc: "The beautiful bathhouse in Matsuyama that inspired Studio Ghibli's masterpiece.", img: "https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&q=80" },
+                { title: "🏘️ Shirakawa-go (Higurashi)", desc: "The peaceful, traditional village that served as the setting for Hinamizawa.", img: "https://images.unsplash.com/photo-1493780474015-ba834fd0ce2f?auto=format&fit=crop&q=80" },
+                { title: "🏀 Kamakura (Slam Dunk)", desc: "The famous railway crossing by the sea that every sports anime fan recognizes.", img: "https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?auto=format&fit=crop&q=80" },
+                { title: "🚄 Akihabara (Steins;Gate)", desc: "The electric town where time-travel experiments began at the Future Gadget Lab.", img: "https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&q=80" }
+            ]
+        };
 
-        // ================= THEME SYSTEM =================
-        function toggleTheme(){
-            const root = document.documentElement;
-            const current = localStorage.getItem("theme") || "dark";
-            const next = current === "dark" ? "light" : "dark";
-            localStorage.setItem("theme", next);
-            applyTheme();
-        }
-
-        function applyTheme(){
-            const theme = localStorage.getItem("theme") || "dark";
-            if(theme === "light"){
-                document.body.style.background = "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)";
-                document.body.style.color = "#2d3436";
-            }else{
-                document.body.style.background = "#0a0a0a";
-                document.body.style.color = "#fff";
-            }
-        }
-
-        // ================= EVENT LISTENERS =================
-        document.addEventListener("DOMContentLoaded", ()=>{
-            loadStore();
-            renderProfiles();
-            update();
-            showPage("home");
-            applyTheme();
+        // --- NAVIGATION ---
+        function showSection(id) {
+            document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+            document.getElementById(`sec-${id}`).classList.add('active');
             
-            document.getElementById("animeInput").addEventListener("keypress", e => {if(e.key === "Enter") searchAnime();});
-            document.getElementById("mangaInput").addEventListener("keypress", e => {if(e.key === "Enter") searchManga();});
-        });
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav', 'hover:bg-white/5', 'text-gray-300'));
+            
+            const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(id));
+            if(activeBtn) activeBtn.classList.add('active-nav');
+
+            window.scrollTo(0,0);
+            refreshStats();
+
+            if(id === 'news') loadSeasonalData();
+            if(id === 'watchlist') renderWatchlist();
+            if(id === 'recipes') renderStaticGrid('recipes-grid', staticData.recipes);
+            if(id === 'travel') renderStaticGrid('travel-grid', staticData.travel);
+        }
+
+        // --- STREAMING_CHUNK:Fetching real-time data from Jikan API... ---
+        async function fetchTop() {
+            const grid = document.getElementById('home-trending-grid');
+            grid.innerHTML = Array(5).fill('<div class="skeleton h-[450px] rounded-[32px]"></div>').join('');
+            try {
+                const res = await fetch(`${API_BASE}/top/anime?limit=10`);
+                const json = await res.json();
+                state.currentDisplay = json.data;
+                renderCards(grid, json.data);
+            } catch (e) { showToast("Connection Throttle..."); }
+        }
+
+        async function performSearch(type) {
+            const input = document.getElementById(`${type}-search-input`).value;
+            const grid = document.getElementById(`${type}-search-results`);
+            if(!input) return;
+
+            grid.innerHTML = Array(5).fill('<div class="skeleton h-[450px] rounded-[32px]"></div>').join('');
+            try {
+                const res = await fetch(`${API_BASE}/${type}?q=${input}&limit=20`);
+                const json = await res.json();
+                state.lastSearch = json.data;
+                renderCards(grid, json.data, true);
+            } catch (e) { showToast("API Busy, Wait 2s."); }
+        }
+
+        async function fetchMood(mood) {
+            const grid = document.getElementById('home-trending-grid');
+            grid.innerHTML = Array(5).fill('<div class="skeleton h-[450px] rounded-[32px]"></div>').join('');
+            
+            let genres = mood === 'hype' ? '1,27' : mood === 'sad' ? '8,41' : mood === 'smart' ? '7,40' : '36,4';
+            try {
+                const res = await fetch(`${API_BASE}/anime?genres=${genres}&order_by=score&sort=desc&limit=10`);
+                const json = await res.json();
+                state.currentDisplay = json.data;
+                renderCards(grid, json.data);
+                grid.scrollIntoView({ behavior: 'smooth' });
+            } catch (e) { showToast("Wait a second..."); }
+        }
+
+        async function loadSeasonalData() {
+            const airGrid = document.getElementById('airing-now-grid');
+            airGrid.innerHTML = '<div class="skeleton h-60 w-full col-span-3 rounded-3xl"></div>';
+            const airRes = await fetch(`${API_BASE}/seasons/now?limit=6`);
+            const airJson = await airRes.json();
+            renderCards(airGrid, airJson.data, false, true);
+
+            const upGrid = document.getElementById('upcoming-list');
+            upGrid.innerHTML = '';
+            const upRes = await fetch(`${API_BASE}/seasons/upcoming?limit=6`);
+            const upJson = await upRes.json();
+            upJson.data.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "flex gap-5 items-center bg-white/5 p-4 rounded-3xl border border-white/5 hover:bg-white/10 transition-all cursor-pointer group";
+                div.innerHTML = `
+                    <img src="${item.images.jpg.small_image_url}" class="w-16 h-16 object-cover rounded-2xl group-hover:scale-110 transition-transform">
+                    <div>
+                        <h4 class="font-black text-sm line-clamp-1 italic">${item.title}</h4>
+                        <p class="text-[10px] text-gray-500 uppercase mt-1 tracking-widest">${item.type || 'TV'} Series</p>
+                    </div>
+                `;
+                upGrid.appendChild(div);
+            });
+        }
+
+        // --- STREAMING_CHUNK:Designing the dynamic card rendering system... ---
+        function renderCards(container, data, isSearch = false, compact = false) {
+            container.innerHTML = data.map((item, idx) => {
+                const malId = item.mal_id;
+                const inList = state.watchlist.some(i => i.mal_id === malId);
+                const currentRating = state.ratings[malId] || 0;
+
+                return `
+                <div class="anime-card group relative">
+                    <div class="relative overflow-hidden">
+                        <img src="${item.images.jpg.large_image_url}" alt="${item.title}" loading="lazy">
+                        <div class="absolute inset-0 bg-black/80 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all gap-5 px-6">
+                            <button onclick="toggleWatchlist(${idx}, ${isSearch}, ${malId})" class="bg-red-500 w-16 h-16 rounded-3xl flex items-center justify-center hover:scale-110 active:scale-95 shadow-2xl transition-all">
+                                <i class="fa-solid ${inList ? 'fa-trash-can' : 'fa-plus'} text-xl"></i>
+                            </button>
+                            <div class="flex gap-2">
+                                ${[1,2,3,4,5].map(star => `
+                                    <i onclick="rateItem(${malId}, ${star})" class="rating-star fa-solid fa-star text-lg ${currentRating >= star ? 'active' : ''}"></i>
+                                `).join('')}
+                            </div>
+                            <a href="${item.url}" target="_blank" class="text-[10px] uppercase font-black tracking-widest text-gray-400 hover:text-white transition-colors">Details →</a>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <h4 class="font-black text-base line-clamp-1 mb-3 italic uppercase">${item.title}</h4>
+                        <div class="flex items-center justify-between mt-auto">
+                            <span class="text-xs text-yellow-500 font-black"><i class="fa-solid fa-star"></i> ${item.score || '8.5'}</span>
+                            <span class="text-[9px] bg-white/10 px-3 py-1.5 rounded-lg text-gray-400 font-black uppercase tracking-tighter">${item.type || 'TV'}</span>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function renderWatchlist() {
+            const grid = document.getElementById('watchlist-grid');
+            if(state.watchlist.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-40 text-center text-gray-700">
+                    <i class="fa-solid fa-ghost text-6xl mb-6 opacity-20"></i>
+                    <p class="text-xl font-black uppercase italic tracking-widest">The Vault is empty.</p>
+                </div>`;
+                return;
+            }
+            renderCards(grid, state.watchlist, false);
+        }
+
+        function renderStaticGrid(containerId, data) {
+            const grid = document.getElementById(containerId);
+            grid.innerHTML = data.map(item => `
+                <div class="anime-card h-full">
+                    <img src="${item.img}" class="h-64 object-cover">
+                    <div class="p-8">
+                        <h4 class="text-2xl font-black mb-3 italic uppercase tracking-tighter">${item.title}</h4>
+                        <p class="text-sm text-gray-500 mb-6 leading-relaxed">${item.desc}</p>
+                        ${item.link ? `<a href="${item.link}" target="_blank" class="inline-block bg-white/5 border border-white/10 px-6 py-3 rounded-xl text-red-500 font-black text-xs uppercase hover:bg-red-500 hover:text-white transition-all">View Full Recipe</a>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- ACTIONS & STATE ---
+        function toggleWatchlist(idx, isSearch, malId) {
+            const list = isSearch ? state.lastSearch : state.currentDisplay;
+            const item = list.find(i => i.mal_id === malId) || state.watchlist.find(i => i.mal_id === malId);
+            
+            const index = state.watchlist.findIndex(i => i.mal_id === malId);
+            if(index > -1) {
+                state.watchlist.splice(index, 1);
+                showToast("Removed from Vault.");
+            } else {
+                state.watchlist.push(item);
+                showToast(`${item.title} Saved!`);
+            }
+            saveAndSync();
+        }
+
+        function rateItem(malId, stars) {
+            state.ratings[malId] = stars;
+            saveAndSync();
+            showToast(`Rated ${stars}/5 Stars!`);
+        }
+
+        function saveAndSync() {
+            localStorage.setItem('otaku_pro_v5_watchlist', JSON.stringify(state.watchlist));
+            localStorage.setItem('otaku_pro_v5_ratings', JSON.stringify(state.ratings));
+            if(document.getElementById('sec-watchlist').classList.contains('active')) renderWatchlist();
+            refreshStats();
+        }
+
+        function refreshStats() {
+            const total = state.watchlist.length;
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('count-watched').textContent = total;
+            
+            const animeCount = state.watchlist.filter(i => !i.chapters).length;
+            document.getElementById('stat-anime').textContent = animeCount;
+            document.getElementById('stat-manga').textContent = total - animeCount;
+
+            const ratings = Object.values(state.ratings);
+            const avg = ratings.length ? (ratings.reduce((a,b) => a+b, 0) / ratings.length).toFixed(1) : "0.0";
+            document.getElementById('stat-rating').textContent = avg;
+
+            const progress = Math.min((total / 50) * 100, 100);
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            t.classList.remove('translate-y-48');
+            setTimeout(() => t.classList.add('translate-y-48'), 3000);
+        }
+
+        window.onload = () => {
+            fetchTop();
+            refreshStats();
+            console.log("OtakuLog Loaded | Welcome Rayaan (DSU Engineering)");
+        };
     </script>
 </body>
 </html>
-
-
-
-
-
