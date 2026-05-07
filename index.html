@@ -27,7 +27,6 @@
             margin: 0; 
             min-height: 100dvh; 
             overflow-x: hidden;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
 
         .bg-mesh {
@@ -76,25 +75,24 @@
                 top: auto;
                 width: 100% !important;
                 height: 70px !important;
-                padding: 0 10px !important;
+                padding: 0 5px !important;
                 border-right: none;
                 border-top: 1px solid rgba(255, 255, 255, 0.1);
                 flex-direction: row !important;
                 justify-content: space-around;
                 align-items: center;
                 z-index: 1000;
-                overflow-x: auto;
-                white-space: nowrap;
             }
             .sidebar-logo, .stats-mini-box, .nav-label { display: none !important; }
             .nav-btn {
-                padding: 12px !important;
-                width: 42px !important;
-                height: 42px !important;
+                padding: 10px !important;
+                width: 44px !important;
+                height: 44px !important;
                 border-radius: 12px !important;
                 justify-content: center !important;
+                margin: 0 !important;
             }
-            .nav-btn i { font-size: 1rem; margin: 0 !important; }
+            .nav-btn i { font-size: 1.1rem; margin: 0 !important; }
             .main-container { padding-bottom: 80px !important; }
             .hero-title { font-size: 3rem !important; }
         }
@@ -121,35 +119,35 @@
             </h2>
         </div>
 
-        <nav class="flex-1 md:space-y-1 flex md:flex-col items-center md:items-stretch overflow-x-auto no-scrollbar">
-            <button onclick="showSection('home')" class="nav-btn active-nav w-full text-left px-4 py-3 rounded-xl flex items-center gap-3">
+        <nav id="sidebar-nav" class="flex-1 md:space-y-1 flex md:flex-col items-center md:items-stretch overflow-x-auto no-scrollbar">
+            <button onclick="showSection('home')" data-id="home" class="nav-btn active-nav w-full text-left px-4 py-3 rounded-xl flex items-center gap-3">
                 <i class="fa-solid fa-fire w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Trending</span>
             </button>
-            <button onclick="showSection('discover')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+            <button onclick="showSection('discover')" data-id="discover" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-magnifying-glass w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Search</span>
             </button>
-             <button onclick="handleAiring()" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+            <button onclick="handleAiring()" data-id="airing" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-play w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Airing</span>
             </button>
-            <button onclick="handleUpcoming()" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+            <button onclick="handleUpcoming()" data-id="upcoming" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-calendar-days w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Upcoming</span>
             </button>
-            <button onclick="showSection('manga')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+            <button onclick="showSection('manga')" data-id="manga" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-book w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Manga</span>
             </button>
-            <button onclick="showSection('music')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+            <button onclick="showSection('music')" data-id="music" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-music w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Music</span>
             </button>
-            <button onclick="showSection('Travel')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+            <button onclick="showSection('travel')" data-id="travel" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-map-location-dot w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Travel</span>
             </button>
-            <button onclick="showSection('watchlist')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+            <button onclick="showSection('watchlist')" data-id="watchlist" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-heart w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Vault</span>
             </button>
-            <button onclick="showSection('recipes')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+            <button onclick="showSection('recipes')" data-id="recipes" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-utensils w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Cookbook</span>
             </button>
-            <button onclick="showSection('about')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+            <button onclick="showSection('about')" data-id="about" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-id-card w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">About</span>
             </button>
         </nav>
@@ -170,13 +168,13 @@
         
         <!-- HOME SECTION -->
         <section id="sec-home" class="section-content active p-4 md:p-10">
-            <div class="relative h-[300px] md:h-[450px] rounded-[24px] md:rounded-[40px] overflow-hidden mb-10 flex items-center px-6 md:px-16 shadow-2xl">
+            <div class="relative h-[250px] md:h-[400px] rounded-[24px] md:rounded-[40px] overflow-hidden mb-10 flex items-center px-6 md:px-16 shadow-2xl">
                 <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578632738908-4844da3e8c0e?q=80')] bg-cover bg-center opacity-40"></div>
                 <div class="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
                 
                 <div class="relative max-w-2xl z-10">
                     <span class="text-red-500 text-[10px] font-black mb-3 inline-block uppercase tracking-[0.3em]">Official Database</span>
-                    <h1 class="hero-title text-5xl md:text-8xl font-black mb-6 leading-tight uppercase italic tracking-tighter">
+                    <h1 class="hero-title text-4xl md:text-7xl font-black mb-6 leading-tight uppercase italic tracking-tighter">
                         OTAKU <span class="text-red-500">LOG</span>
                     </h1>
                 </div>
@@ -255,12 +253,12 @@
                     <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
                         <i class="fa-solid fa-graduation-cap text-red-500 text-2xl mb-4"></i>
                         <h4 class="font-black uppercase mb-2 text-[10px] tracking-widest">DSU Engineering</h4>
-                        <p class="text-[10px] text-gray-500 leading-relaxed">.</p>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">Focusing on modern software development and architecture.</p>
                     </div>
                     <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
                         <i class="fa-solid fa-code-branch text-blue-500 text-2xl mb-4"></i>
-                        <h4 class="font-black uppercase mb-2 text-[10px] tracking-widest">Why this website?</h4>
-                        <p class="text-[10px] text-gray-500 leading-relaxed">I love ANIME and wanted to create an immersive digital experiences that resonate with fans.</p>
+                        <h4 class="font-black uppercase mb-2 text-[10px] tracking-widest">Vision</h4>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">Creating immersive digital experiences that resonate with fans globally.</p>
                     </div>
                 </div>
 
@@ -292,8 +290,8 @@
             { title: "Ichiraku Ramen", desc: "Naruto's favorite miso-pork broth with extra narutomaki.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80" },
             { title: "Baratie Fried Rice", desc: "The legendary meal Sanji made for a starving Gin.", img: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80" },
             { title: "Zoro's Onigiri", desc: "Simple, salted rice balls wrapped in crispy seaweed.", img: "https://images.unsplash.com/photo-1512058560366-cd24270083cd?q=80" },
-            { title: "Ghibli Stew", desc: "Hearty vegetable and meat stew inspired by Castle in the Sky.", img: "https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80" }
-            { title: "More", desc: "https://itadakimasuanime.wordpress.com/recipes/" }
+            { title: "Ghibli Stew", desc: "Hearty vegetable and meat stew inspired by Castle in the Sky.", img: "https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80" },
+            { title: "More Recipes", desc: "Explore even more culinary creations from the anime world.", img: "https://images.unsplash.com/photo-1552611052-33e04de081de?q=80", link: "https://itadakimasuanime.wordpress.com/recipes/" }
         ];
 
         const travelDestinations = [
@@ -313,24 +311,30 @@
         ];
 
         function showSection(id) {
+            // Hide all sections
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-            document.getElementById(`sec-${id}`).classList.add('active');
+            // Show selected section
+            const target = document.getElementById(`sec-${id}`);
+            if(target) target.classList.add('active');
             
+            // Update Navigation UI
             document.querySelectorAll('.nav-btn').forEach(b => {
                 b.classList.remove('active-nav');
                 b.classList.add('text-gray-400');
             });
             
-            const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(id));
+            const btn = document.querySelector(`.nav-btn[data-id="${id}"]`);
             if(btn) {
                 btn.classList.add('active-nav');
                 btn.classList.remove('text-gray-400');
             }
 
+            // Section Specific Renders
             if(id === 'watchlist') renderWatchlist();
             if(id === 'recipes') renderRecipes();
             if(id === 'music') renderMusic();
             if(id === 'travel') renderTravel();
+            
             window.scrollTo(0,0);
         }
 
@@ -448,6 +452,10 @@
             
             localStorage.setItem('otaku_vault', JSON.stringify(state.watchlist));
             refreshUI();
+            
+            // If in watchlist view, re-render immediately
+            const activeSection = document.querySelector('.section-content.active');
+            if(activeSection && activeSection.id === 'sec-watchlist') renderWatchlist();
         }
 
         function renderWatchlist() {
@@ -460,7 +468,8 @@
                     <img src="${r.img}" class="w-full h-40 object-cover opacity-60 group-hover:opacity-100 transition-opacity">
                     <div class="p-4">
                         <h4 class="font-black text-xs uppercase text-red-500 italic mb-2">${r.title}</h4>
-                        <p class="text-[10px] text-gray-400 leading-relaxed">${r.desc}</p>
+                        <p class="text-[10px] text-gray-400 leading-relaxed mb-4">${r.desc}</p>
+                        ${r.link ? `<a href="${r.link}" target="_blank" class="text-[10px] text-white underline font-bold uppercase tracking-widest">Visit Cookbook</a>` : ''}
                     </div>
                 </div>
             `).join('');
@@ -469,10 +478,7 @@
         function refreshUI() {
             const count = state.watchlist.length;
             document.getElementById('count-watched').textContent = count;
-            document.getElementById('progress-bar').style.width = `${Math.min(count * 4, 100)}%`;
-            
-            const activeSection = document.querySelector('.section-content.active');
-            if(activeSection && activeSection.id === 'sec-watchlist') renderWatchlist();
+            document.getElementById('progress-bar').style.width = `${Math.min(count * 5, 100)}%`;
         }
 
         function showToast(msg) {
