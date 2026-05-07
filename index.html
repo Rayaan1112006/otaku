@@ -2,586 +2,489 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OtakuLog Pro | Rayaan's Ultimate Anime Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>OtakuLog | Your Ultimate Anime & Manga Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --accent: #ff416c;
             --accent-gradient: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-            --glass-bg: rgba(10, 10, 18, 0.85);
-            --border-glow: rgba(255, 65, 108, 0.3);
+            --glass-bg: rgba(10, 10, 18, 0.96);
         }
 
-        * { box-sizing: border-box; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        body { background-color: #08080c; color: #fff; margin: 0; overflow-x: hidden; }
-        h1, h2, h3 { font-family: 'Poppins', sans-serif; }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #08080c; }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Inter', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body { 
+            background-color: #08080c; 
+            color: #fff; 
+            margin: 0; 
+            min-height: 100dvh; 
+            overflow-x: hidden;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
 
         .bg-mesh {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
             background: 
-                radial-gradient(circle at 10% 20%, rgba(255, 65, 108, 0.12) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 210, 255, 0.08) 0%, transparent 40%);
-            animation: pulse 15s ease-in-out infinite alternate;
+                radial-gradient(circle at 10% 20%, rgba(255, 65, 108, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 210, 255, 0.05) 0%, transparent 40%);
+            pointer-events: none;
         }
-
-        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
 
         .glass-sidebar {
             background: var(--glass-bg);
-            backdrop-filter: blur(30px);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-btn {
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .active-nav { 
+            background: var(--accent-gradient); 
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
         }
 
         .anime-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
             overflow: hidden;
-            display: flex; flex-direction: column;
+            transition: transform 0.3s ease;
         }
-
-        .anime-card:hover {
-            transform: translateY(-12px);
-            border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(255, 65, 108, 0.2);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .anime-card img { width: 100%; height: 320px; object-fit: cover; transition: 0.5s ease; }
-        .anime-card:hover img { transform: scale(1.05); }
-
-        .rating-star { cursor: pointer; transition: color 0.2s; color: #333; }
-        .rating-star.active { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.4); }
-
-        .active-nav { background: var(--accent-gradient); box-shadow: 0 0 25px var(--border-glow); }
-
-        .skeleton {
-            background: linear-gradient(90deg, #0d0d15 25%, #1a1a2a 50%, #0d0d15 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
         .section-content { display: none; }
-        .section-content.active { display: block; animation: fadeIn 0.6s ease-out; }
+        .section-content.active { display: block; animation: fadeIn 0.4s ease-out; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .hero-glow {
-            text-shadow: 0 0 30px rgba(255, 65, 108, 0.6);
+        @media (max-width: 768px) {
+            .glass-sidebar {
+                position: fixed;
+                bottom: 0;
+                top: auto;
+                width: 100% !important;
+                height: 70px !important;
+                padding: 0 10px !important;
+                border-right: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                flex-direction: row !important;
+                justify-content: space-around;
+                align-items: center;
+                z-index: 1000;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .sidebar-logo, .stats-mini-box, .nav-label { display: none !important; }
+            .nav-btn {
+                padding: 12px !important;
+                width: 42px !important;
+                height: 42px !important;
+                border-radius: 12px !important;
+                justify-content: center !important;
+            }
+            .nav-btn i { font-size: 1rem; margin: 0 !important; }
+            .main-container { padding-bottom: 80px !important; }
+            .hero-title { font-size: 3rem !important; }
         }
+
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        
+        .music-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.2s;
+        }
+        .music-card:active { transform: scale(0.98); }
     </style>
 </head>
 <body class="flex flex-col md:flex-row min-h-screen">
     <div class="bg-mesh"></div>
 
-    <aside class="glass-sidebar w-full md:w-72 md:h-screen sticky top-0 flex flex-col p-6 z-50 overflow-y-auto">
-        <div class="mb-10 text-center">
-            <h2 class="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500">
+    <!-- SIDEBAR / BOTTOM NAV ON MOBILE -->
+    <aside class="glass-sidebar w-full md:w-64 md:h-screen sticky top-0 flex flex-col p-6 z-50">
+        <div class="mb-10 sidebar-logo">
+            <h2 class="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-500">
                 OTAKULOG
             </h2>
-            <p class="text-[9px] uppercase tracking-[0.3em] text-gray-400 mt-2 font-bold">Pro Level Tracker</p>
         </div>
 
-        <nav class="flex-1 space-y-2">
-            <button onclick="showSection('home')" class="nav-btn active-nav w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all">
-                <i class="fa-solid fa-house-chimney"></i> <span class="font-semibold">Home</span>
+        <nav class="flex-1 md:space-y-1 flex md:flex-col items-center md:items-stretch overflow-x-auto no-scrollbar">
+            <button onclick="showSection('home')" class="nav-btn active-nav w-full text-left px-4 py-3 rounded-xl flex items-center gap-3">
+                <i class="fa-solid fa-fire w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Trending</span>
             </button>
-            <button onclick="showSection('discover')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
-                <i class="fa-solid fa-play"></i> <span class="font-semibold">Anime Database</span>
+            <button onclick="showSection('discover')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-magnifying-glass w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Search</span>
             </button>
-            <button onclick="showSection('manga')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
-                <i class="fa-solid fa-book-open"></i> <span class="font-semibold">Manga Vault</span>
+             <button onclick="handleAiring()" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-play w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Airing</span>
             </button>
-            <button onclick="showSection('watchlist')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
-                <i class="fa-solid fa-heart"></i> <span class="font-semibold">My Collection</span>
+            <button onclick="handleUpcoming()" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-calendar-days w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Upcoming</span>
             </button>
-            <button onclick="showSection('news')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
-                <i class="fa-solid fa-bolt"></i> <span class="font-semibold">Industry News</span>
+            <button onclick="showSection('manga')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-book w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Manga</span>
             </button>
-            <button onclick="showSection('recipes')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
-                <i class="fa-solid fa-utensils"></i> <span class="font-semibold">Sanji's Cookbook</span>
+            <button onclick="showSection('music')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-music w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Music</span>
             </button>
-            <button onclick="showSection('travel')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
-                <i class="fa-solid fa-map-location-dot"></i> <span class="font-semibold">Pilgrimage</span>
+            <button onclick="showSection('Travel')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-map-location-dot w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Travel</span>
             </button>
-            <button onclick="showSection('stats')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
-                <i class="fa-solid fa-chart-pie"></i> <span class="font-semibold">User Stats</span>
+            <button onclick="showSection('watchlist')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-heart w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Vault</span>
             </button>
-            <button onclick="showSection('about')" class="nav-btn w-full text-left px-5 py-4 rounded-2xl flex items-center gap-4 transition-all hover:bg-white/5 text-gray-300">
-                <i class="fa-solid fa-user-ninja"></i> <span class="font-semibold">The Creator</span>
+            <button onclick="showSection('recipes')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-utensils w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">Cookbook</span>
+            </button>
+            <button onclick="showSection('about')" class="nav-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-id-card w-5"></i> <span class="nav-label font-semibold text-xs uppercase tracking-wider">About</span>
             </button>
         </nav>
 
-        <div id="stats-mini" class="mt-8 p-5 bg-white/5 rounded-3xl border border-white/10">
-            <p class="text-[10px] text-gray-500 uppercase font-bold mb-3">Goal Progress</p>
-            <div class="flex justify-between items-end mb-2">
-                <span id="count-watched" class="text-2xl font-black text-red-500">0</span>
-                <span class="text-[10px] text-gray-500">Total Saved</span>
+        <div class="mt-auto pt-6 border-t border-white/5 stats-mini-box">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Progress</span>
+                <span id="count-watched" class="text-xs font-black text-red-500">0</span>
             </div>
-            <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
-                <div id="progress-bar" class="bg-gradient-to-r from-red-500 to-pink-500 h-full transition-all duration-700" style="width: 0%"></div>
+            <div class="w-full bg-gray-800 h-1 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-red-500 h-full transition-all duration-500" style="width: 0%"></div>
             </div>
         </div>
     </aside>
 
-    <main class="flex-1 min-h-screen relative overflow-y-auto">
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 min-h-screen relative main-container custom-scroll overflow-x-hidden">
         
-        <!-- SECTION: HOME -->
-        <section id="sec-home" class="section-content active p-6 md:p-10">
-            <div class="relative h-[550px] rounded-[48px] overflow-hidden mb-16 flex items-center px-10 md:px-20 group">
-                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578632738980-43318b5c9476?auto=format&fit=crop&q=80')] bg-cover bg-center transition-transform duration-1000 group-hover:scale-110"></div>
+        <!-- HOME SECTION -->
+        <section id="sec-home" class="section-content active p-4 md:p-10">
+            <div class="relative h-[300px] md:h-[450px] rounded-[24px] md:rounded-[40px] overflow-hidden mb-10 flex items-center px-6 md:px-16 shadow-2xl">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1578632738908-4844da3e8c0e?q=80')] bg-cover bg-center opacity-40"></div>
                 <div class="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent"></div>
                 
-                <div class="relative max-w-3xl z-10">
-                    <span class="bg-red-500 text-white px-5 py-2 rounded-full text-xs font-black mb-8 inline-block uppercase tracking-widest shadow-lg shadow-red-500/30">Feature Highlight</span>
-                    <h1 class="text-6xl md:text-8xl font-black mb-8 leading-tight hero-glow">DISCOVER<br><span class="text-red-500 italic">IMMERSE.</span></h1>
-                    <p class="text-gray-300 mb-10 text-xl max-w-xl leading-relaxed">The ultimate companion for every Otaku. Real-time data from Jikan v4, industry news, and community ratings.</p>
-                    <div class="flex gap-6">
-                        <button onclick="showSection('discover')" class="bg-white text-black px-12 py-5 rounded-2xl font-black hover:bg-red-500 hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-2xl">Start Exploring</button>
-                        <button onclick="showSection('recipes')" class="bg-white/10 backdrop-blur-3xl px-12 py-5 rounded-2xl font-black border border-white/20 hover:bg-white/20 transition-all">Anime Food</button>
-                    </div>
+                <div class="relative max-w-2xl z-10">
+                    <span class="text-red-500 text-[10px] font-black mb-3 inline-block uppercase tracking-[0.3em]">Official Database</span>
+                    <h1 class="hero-title text-5xl md:text-8xl font-black mb-6 leading-tight uppercase italic tracking-tighter">
+                        OTAKU <span class="text-red-500">LOG</span>
+                    </h1>
                 </div>
             </div>
 
-            <div class="mb-16">
-                <div class="flex justify-between items-center mb-10">
-                    <h2 class="text-4xl font-black italic">TOP PICKS <span class="text-red-500">2024</span></h2>
-                    <button onclick="showSection('discover')" class="text-red-500 hover:text-red-400 font-black flex items-center gap-3 group">
-                        Browse All <i class="fa-solid fa-chevron-right group-hover:translate-x-1 transition-all"></i>
-                    </button>
-                </div>
-                <div id="home-trending-grid" class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-                    <!-- API Data -->
-                </div>
-            </div>
-
-            <div class="mb-16">
-                <h3 class="text-3xl font-black mb-10 flex items-center gap-4 uppercase"><i class="fa-solid fa-masks-theater text-pink-500"></i> Mood Navigator</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <button onclick="fetchMood('hype')" class="p-8 bg-orange-600/10 border border-orange-500/20 rounded-[32px] hover:border-orange-500 transition-all text-left group">
-                        <span class="text-5xl block mb-4 group-hover:scale-110 transition-transform">🔥</span>
-                        <span class="font-black text-2xl uppercase italic">Hype</span>
-                        <p class="text-sm text-gray-500 mt-2">Action, Sports, Shonen</p>
-                    </button>
-                    <button onclick="fetchMood('sad')" class="p-8 bg-blue-600/10 border border-blue-500/20 rounded-[32px] hover:border-blue-500 transition-all text-left group">
-                        <span class="text-5xl block mb-4 group-hover:scale-110 transition-transform">😢</span>
-                        <span class="font-black text-2xl uppercase italic">Sadness</span>
-                        <p class="text-sm text-gray-500 mt-2">Drama, Tragedy, Romance</p>
-                    </button>
-                    <button onclick="fetchMood('smart')" class="p-8 bg-purple-600/10 border border-purple-500/20 rounded-[32px] hover:border-purple-500 transition-all text-left group">
-                        <span class="text-5xl block mb-4 group-hover:scale-110 transition-transform">🧠</span>
-                        <span class="font-black text-2xl uppercase italic">Psych</span>
-                        <p class="text-sm text-gray-500 mt-2">Mystery, Psychological</p>
-                    </button>
-                    <button onclick="fetchMood('chill')" class="p-8 bg-green-600/10 border border-green-500/20 rounded-[32px] hover:border-green-500 transition-all text-left group">
-                        <span class="text-5xl block mb-4 group-hover:scale-110 transition-transform">🍃</span>
-                        <span class="font-black text-2xl uppercase italic">Chill</span>
-                        <p class="text-sm text-gray-500 mt-2">Slice of Life, Comedy</p>
-                    </button>
-                </div>
-            </div>
+            <h3 id="home-title" class="text-xl font-black mb-6 uppercase italic tracking-tighter flex items-center gap-2">
+                <span class="w-8 h-[2px] bg-red-500"></span> Trending This Week
+            </h3>
+            <div id="home-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
         </section>
 
-        <section id="sec-discover" class="section-content p-10">
-            <div class="mb-12 text-center">
-                <h2 class="text-6xl font-black mb-4 italic uppercase">Global Database</h2>
-                <p class="text-gray-400 text-lg">Querying the MyAnimeList Core Infrastructure</p>
-            </div>
-
-            <div class="max-w-4xl mx-auto mb-16 flex gap-5">
-                <div class="flex-1 relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-6 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                    <input type="text" id="anime-search-input" placeholder="Enter series title..." class="w-full bg-white/5 border border-white/10 rounded-3xl py-6 pl-16 pr-8 focus:border-red-500 focus:ring-4 focus:ring-red-500/10 outline-none transition-all text-xl font-medium">
-                </div>
-                <button onclick="performSearch('anime')" class="bg-red-500 px-14 py-6 rounded-3xl font-black text-xl hover:shadow-2xl shadow-red-500/40 transition-all active:scale-95">FIND</button>
-            </div>
-
-            <div id="anime-search-results" class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-                <!-- Results -->
-            </div>
+        <!-- TRAVEL SECTION -->
+        <section id="sec-travel" class="section-content p-4 md:p-10">
+            <h2 class="text-3xl font-black mb-2 uppercase italic tracking-tighter">Japan Guide</h2>
+            <p class="text-gray-500 text-xs mb-10 uppercase tracking-widest">Bucket-list destinations for every Otaku.</p>
+            <div id="travel-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </section>
 
-        <!-- SECTION: MANGA -->
-        <section id="sec-manga" class="section-content p-10">
-            <div class="mb-12 text-center">
-                <h2 class="text-6xl font-black mb-4 italic uppercase">Manga Vault</h2>
-                <p class="text-gray-400 text-lg">Manhwa, Manhua, and Light Novels</p>
-            </div>
-
-            <div class="max-w-4xl mx-auto mb-16 flex gap-5">
-                <div class="flex-1 relative">
-                    <i class="fa-solid fa-book-bookmark absolute left-6 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                    <input type="text" id="manga-search-input" placeholder="Search volumes..." class="w-full bg-white/5 border border-white/10 rounded-3xl py-6 pl-16 pr-8 focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 outline-none transition-all text-xl font-medium">
+        <!-- DISCOVER SECTION -->
+        <section id="sec-discover" class="section-content p-4 md:p-10">
+            <div class="mb-10">
+                <h2 class="text-3xl font-black mb-6 uppercase italic tracking-tighter">Search Database</h2>
+                <div class="flex gap-2 bg-white/5 p-2 rounded-2xl border border-white/10">
+                    <input type="text" id="anime-search-input" placeholder="Enter anime name..." class="flex-1 bg-transparent py-3 px-4 outline-none text-sm">
+                    <button onclick="performSearch('anime')" class="bg-red-500 px-6 py-3 rounded-xl font-black uppercase text-[10px]">Go</button>
                 </div>
-                <button onclick="performSearch('manga')" class="bg-pink-600 px-14 py-6 rounded-3xl font-black text-xl hover:shadow-2xl shadow-pink-500/40 transition-all active:scale-95">READ</button>
             </div>
-
-            <div id="manga-search-results" class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-                <!-- Results -->
-            </div>
+            <div id="anime-results" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
         </section>
 
-        <!-- SECTION: WATCHLIST -->
-        <section id="sec-watchlist" class="section-content p-10">
-            <div class="flex justify-between items-end mb-16 border-b border-white/10 pb-10">
-                <div>
-                    <h2 class="text-5xl font-black italic uppercase">The Private Library</h2>
-                    <p class="text-gray-400 text-lg mt-3">Curated items saved to your browser's persistent storage.</p>
+        <!-- MANGA SECTION -->
+        <section id="sec-manga" class="section-content p-4 md:p-10">
+            <div class="mb-10">
+                <h2 class="text-3xl font-black mb-6 uppercase italic tracking-tighter">Manga Library</h2>
+                <div class="flex gap-2 bg-white/5 p-2 rounded-2xl border border-white/10">
+                    <input type="text" id="manga-search-input" placeholder="Enter manga name..." class="flex-1 bg-transparent py-3 px-4 outline-none text-sm">
+                    <button onclick="performSearch('manga')" class="bg-pink-600 px-6 py-3 rounded-xl font-black uppercase text-[10px]">Go</button>
                 </div>
             </div>
-            <div id="watchlist-grid" class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-                <!-- Saved items -->
-            </div>
+            <div id="manga-results" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
         </section>
 
-        <!-- SECTION: NEWS -->
-        <section id="sec-news" class="section-content p-10">
-            <h2 class="text-5xl font-black mb-12 italic uppercase">Industry Radar</h2>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
-                <div class="lg:col-span-2">
-                    <h3 class="text-2xl font-black mb-8 flex items-center gap-3"><i class="fa-solid fa-signal text-green-500"></i> Airing This Week</h3>
-                    <div id="airing-now-grid" class="grid grid-cols-2 md:grid-cols-3 gap-6"></div>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-black mb-8 flex items-center gap-3"><i class="fa-solid fa-hourglass-start text-blue-500"></i> Most Anticipated</h3>
-                    <div id="upcoming-list" class="space-y-5"></div>
-                </div>
-            </div>
+        <!-- MUSIC SECTION -->
+        <section id="sec-music" class="section-content p-4 md:p-10">
+            <h2 class="text-3xl font-black mb-2 uppercase italic tracking-tighter">Vibe Check</h2>
+            <p class="text-gray-500 text-xs mb-10 uppercase tracking-widest">Iconic soundtracks & anime openings.</p>
+            <div id="music-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
-        <section id="sec-recipes" class="section-content p-10">
-            <h2 class="text-5xl font-black mb-4 italic uppercase">Sanji's Legendary Kitchen</h2>
-            <p class="text-gray-400 mb-12 text-lg">Recreate the masterpieces of the straw-hat chef.</p>
-            <div id="recipes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <!-- Recipes injected here -->
-            </div>
+        <!-- WATCHLIST SECTION -->
+        <section id="sec-watchlist" class="section-content p-4 md:p-10">
+            <h2 class="text-3xl font-black mb-10 uppercase italic tracking-tighter">My Personal Vault</h2>
+            <div id="watchlist-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
         </section>
 
-        <section id="sec-travel" class="section-content p-10">
-            <h2 class="text-5xl font-black mb-4 italic uppercase">Anime Pilgrimage</h2>
-            <p class="text-gray-400 mb-12 text-lg">Real-life landmarks that inspired the greatest scenes.</p>
-            <div id="travel-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Travel cards injected here -->
-            </div>
+        <!-- RECIPES SECTION -->
+        <section id="sec-recipes" class="section-content p-4 md:p-10">
+            <h2 class="text-3xl font-black mb-2 uppercase italic tracking-tighter">Sanji's Menu</h2>
+            <p class="text-gray-500 text-xs mb-10 uppercase tracking-widest">Gourmet recreations for pirates.</p>
+            <div id="recipes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
-        <!-- SECTION: STATS -->
-        <section id="sec-stats" class="section-content p-10">
-            <h2 class="text-5xl font-black mb-12 italic uppercase">System Diagnostics</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="bg-white/5 border border-white/10 p-10 rounded-[40px] text-center group transition-all hover:bg-white/10">
-                    <p class="text-gray-500 uppercase text-xs font-black tracking-widest mb-4">Total Vault</p>
-                    <h3 id="stat-total" class="text-7xl font-black text-red-500 group-hover:scale-110 transition-transform">0</h3>
-                </div>
-                <div class="bg-white/5 border border-white/10 p-10 rounded-[40px] text-center group transition-all hover:bg-white/10">
-                    <p class="text-gray-500 uppercase text-xs font-black tracking-widest mb-4">Anime Items</p>
-                    <h3 id="stat-anime" class="text-7xl font-black text-blue-500 group-hover:scale-110 transition-transform">0</h3>
-                </div>
-                <div class="bg-white/5 border border-white/10 p-10 rounded-[40px] text-center group transition-all hover:bg-white/10">
-                    <p class="text-gray-500 uppercase text-xs font-black tracking-widest mb-4">Manga Items</p>
-                    <h3 id="stat-manga" class="text-7xl font-black text-pink-500 group-hover:scale-110 transition-transform">0</h3>
-                </div>
-                <div class="bg-white/5 border border-white/10 p-10 rounded-[40px] text-center group transition-all hover:bg-white/10">
-                    <p class="text-gray-500 uppercase text-xs font-black tracking-widest mb-4">Avg Taste</p>
-                    <h3 id="stat-rating" class="text-7xl font-black text-yellow-500 group-hover:scale-110 transition-transform">0.0</h3>
-                </div>
-            </div>
-        </section>
-
-        <section id="sec-about" class="section-content p-6 md:p-10 max-w-5xl mx-auto">
-            <div class="bg-white/5 border border-white/10 rounded-[64px] p-10 md:p-16 relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 text-[200px] opacity-[0.03] select-none rotate-12">STUDENT</div>
-                <h2 class="text-5xl md:text-6xl font-black mb-8 italic uppercase tracking-tighter">Meet the <span class="text-red-500">Architect</span></h2>
-                
-                <div class="space-y-8 text-xl text-gray-300 leading-relaxed font-light">
-                    <p>
-                        Hey there! I'm <span class="text-white font-black">Rayaan</span>, a hardcore Anime enthusiast and an <span class="text-blue-400 font-bold">Engineering Student at Dayananda Sagar University (DSU)</span> in Bengaluru. 
-                    </p>
-                    <p>
-                        My world exists at the intersection of <span class="italic text-red-400">Cinematography, Mystery Writing, and Advanced Tech</span>. When I'm not grinding through engineering projects, I'm analyzing the frame composition of Ufotable animations or plotting my next mystery story.
-                    </p>
-                    <p>
-                        <span class="text-white font-bold">OtakuLog</span> was born out of my passion for <span class="font-bold">Animation and Filming</span>. I wanted to build a platform that didn't just list data, but felt as cinematic and immersive as the shows we love. This project represents my journey in combining high-end design with functional data engineering.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-16">
-                    <div class="p-8 bg-white/5 rounded-[32px] border border-white/5">
-                        <h4 class="font-black mb-4 text-red-500 flex items-center gap-3 italic uppercase"><i class="fa-solid fa-graduation-cap"></i> Academic Base</h4>
-                        <p class="text-base text-gray-400 font-medium">Currently pursuing Engineering at DSU. Merging structural logic with creative digital experiences.</p>
-                    </div>
-                    <div class="p-8 bg-white/5 rounded-[32px] border border-white/5">
-                        <h4 class="font-black mb-4 text-blue-500 flex items-center gap-3 italic uppercase"><i class="fa-solid fa-camera-retro"></i> Creative Stack</h4>
-                        <p class="text-base text-gray-400 font-medium">Filmmaking, Animation Analysis, Mystery Screenwriting, and Full-Stack Development.</p>
+        <!-- ABOUT SECTION -->
+        <section id="sec-about" class="section-content p-4 md:p-10 max-w-5xl">
+            <div class="bg-white/5 border border-white/10 rounded-[32px] p-8 md:p-12">
+                <div class="mb-8">
+                    <h2 class="text-4xl md:text-6xl font-black mb-4 italic uppercase tracking-tighter">RAYAAN <span class="text-red-500">KHAN</span></h2>
+                    <p class="text-red-500 font-bold uppercase tracking-widest text-xs mb-6">Engineering Student @ Dayananda Sagar University</p>
+                    <div class="space-y-4 text-gray-400 text-sm md:text-base leading-relaxed">
+                        <p>I am a hardcore anime enthusiast, engineering student, and digital storyteller. Currently pursuing my engineering degree at Dayananda Sagar University (DSU), I specialize in building logical architectures for the web.</p>
+                        <p>My passion lies in merging the structured world of engineering with the vibrant aesthetics of anime culture. I build digital tools that celebrate my love for high-stakes storytelling and complex world-building.</p>
                     </div>
                 </div>
 
-                <div class="flex flex-wrap gap-5">
-                    <a href="https://instagram.com/the_rayaan_k" target="_blank" class="bg-gradient-to-r from-red-500 to-pink-500 px-10 py-5 rounded-2xl font-black flex items-center gap-3 hover:scale-105 transition-all shadow-xl shadow-red-500/30">
-                        <i class="fa-brands fa-instagram text-xl"></i> Follow @the_rayaan_k
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12">
+                    <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
+                        <i class="fa-solid fa-graduation-cap text-red-500 text-2xl mb-4"></i>
+                        <h4 class="font-black uppercase mb-2 text-[10px] tracking-widest">DSU Engineering</h4>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">.</p>
+                    </div>
+                    <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
+                        <i class="fa-solid fa-code-branch text-blue-500 text-2xl mb-4"></i>
+                        <h4 class="font-black uppercase mb-2 text-[10px] tracking-widest">Why this website?</h4>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">I love ANIME and wanted to create an immersive digital experiences that resonate with fans.</p>
+                    </div>
+                </div>
+
+                <div class="mt-10 flex flex-wrap gap-3">
+                    <a href="https://instagram.com/the_rayaan_k" target="_blank" class="bg-gradient-to-r from-red-600 to-pink-600 px-6 py-3 rounded-xl font-black flex items-center gap-2 text-[10px] uppercase tracking-widest transition-transform active:scale-95">
+                        <i class="fa-brands fa-instagram"></i> Instagram
                     </a>
-                    <div class="bg-white/5 border border-white/10 px-8 py-5 rounded-2xl font-bold flex items-center gap-3 italic">
-                        <i class="fa-solid fa-location-dot text-red-500"></i> Bengaluru, IN
-                    </div>
+                    <a href="https://www.linkedin.com/in/rayaan-khan111" target="_blank" class="bg-blue-700 px-6 py-3 rounded-xl font-black flex items-center gap-2 text-[10px] uppercase tracking-widest transition-transform active:scale-95">
+                        <i class="fa-brands fa-linkedin"></i> LinkedIn
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Toast Notification -->
-        <div id="toast" class="fixed bottom-12 right-12 bg-white text-black px-10 py-6 rounded-3xl font-black transform translate-y-48 transition-all duration-500 z-[100] shadow-2xl flex items-center gap-4 italic uppercase tracking-wider">
-            <i class="fa-solid fa-circle-check text-green-600 text-2xl"></i>
-            <span id="toast-msg">Success!</span>
+        <!-- Toast -->
+        <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-white text-black px-6 py-3 rounded-full font-black text-[10px] uppercase tracking-widest shadow-2xl opacity-0 transition-opacity pointer-events-none z-[2000]">
+            Item Updated
         </div>
     </main>
 
     <script>
-        const API_BASE = "https://api.jikan.moe/v4";
-        
+        const API = "https://api.jikan.moe/v4";
         let state = {
-            watchlist: JSON.parse(localStorage.getItem('otaku_pro_v5_watchlist')) || [],
-            ratings: JSON.parse(localStorage.getItem('otaku_pro_v5_ratings')) || {},
-            lastSearch: [],
-            currentDisplay: []
+            watchlist: JSON.parse(localStorage.getItem('otaku_vault')) || [],
+            currentData: []
         };
 
-        const staticData = {
-            recipes: [
-                { title: "🍖 Sanji's Sea King Steak", desc: "The ultimate pirate feast, slow-cooked to perfection for the crew.", img: "https://images.unsplash.com/photo-1546241072-48010ad2862c?auto=format&fit=crop&q=80", link: "https://itadakimasuanime.wordpress.com/2014/10/24/one-piece-sanjis-meat-on-the-bone/" },
-                { title: "🍜 Ichiraku Miso Ramen", desc: "Naruto's go-to comfort meal. Rich miso broth with extra chashu.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&q=80", link: "https://tasty.co/recipe/naruto-inspired-miso-ramen" },
-                { title: "🍙 Sanji's Fried Rice (Baratie)", desc: "The famous dish Sanji prepared for Gin, made with simple ingredients but immense soul.", img: "https://images.unsplash.com/photo-1512058560366-cd24270083cd?auto=format&fit=crop&q=80", link: "https://www.youtube.com/watch?v=R5p-K_M-lS0" },
-                { title: "🍚 Ponyo's Ham Ramen", desc: "A simple, heartwarming ham and egg ramen bowl for kids and sea spirits.", img: "https://images.unsplash.com/photo-1591814448473-7027b515b41e?auto=format&fit=crop&q=80", link: "https://www.allrecipes.com/recipe/262548/simple-ham-and-egg-ramen/" },
-                { title: "🦐 Sanji's Seafood Risotto", desc: "A high-end Baratie special that captures the flavor of the East Blue.", img: "https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&q=80", link: "https://www.google.com/search?q=sanji+seafood+risotto+recipe" },
-                { title: "🍛 Soma's Transforming Furikake", desc: "Food Wars classic. A dish that feels like a festival in your mouth.", img: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80", link: "https://shokugekinosoma.fandom.com/wiki/Transforming_Furikake_Rice" }
-            ],
-            travel: [
-                { title: "🌉 Your Name (Suga Shrine)", desc: "The iconic red staircase stairs from the finale of Makoto Shinkai's Your Name.", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80" },
-                { title: "🚉 Shibuya Crossing (JJK)", desc: "The heart of Tokyo and site of the legendary Shibuya Incident arc.", img: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&q=80" },
-                { title: "🗼 Tokyo Tower (AoT)", desc: "Inspired many backgrounds in early seasons and modern sci-fi anime.", img: "https://images.unsplash.com/photo-1536098565842-145119ad41a1?auto=format&fit=crop&q=80" },
-                { title: "🏞️ Hakone (Evangelion)", desc: "The real-world location for Tokyo-3 in the Neon Genesis Evangelion series.", img: "https://images.unsplash.com/photo-1528164344705-47542687990d?auto=format&fit=crop&q=80" },
-                { title: "🛀 Dogo Onsen (Spirited Away)", desc: "The beautiful bathhouse in Matsuyama that inspired Studio Ghibli's masterpiece.", img: "https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&q=80" },
-                { title: "🏘️ Shirakawa-go (Higurashi)", desc: "The peaceful, traditional village that served as the setting for Hinamizawa.", img: "https://images.unsplash.com/photo-1493780474015-ba834fd0ce2f?auto=format&fit=crop&q=80" },
-                { title: "🏀 Kamakura (Slam Dunk)", desc: "The famous railway crossing by the sea that every sports anime fan recognizes.", img: "https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?auto=format&fit=crop&q=80" },
-                { title: "🚄 Akihabara (Steins;Gate)", desc: "The electric town where time-travel experiments began at the Future Gadget Lab.", img: "https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&q=80" }
-            ]
-        };
+        const recipes = [
+            { title: "Ichiraku Ramen", desc: "Naruto's favorite miso-pork broth with extra narutomaki.", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80" },
+            { title: "Baratie Fried Rice", desc: "The legendary meal Sanji made for a starving Gin.", img: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80" },
+            { title: "Zoro's Onigiri", desc: "Simple, salted rice balls wrapped in crispy seaweed.", img: "https://images.unsplash.com/photo-1512058560366-cd24270083cd?q=80" },
+            { title: "Ghibli Stew", desc: "Hearty vegetable and meat stew inspired by Castle in the Sky.", img: "https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80" }
+            { title: "More", desc: "https://itadakimasuanime.wordpress.com/recipes/" }
+        ];
 
-        // --- NAVIGATION ---
+        const travelDestinations = [
+            { name: "Akihabara", location: "Tokyo", desc: "The Electric Town. A neon-soaked paradise for electronics, manga, and gaming enthusiasts.", img: "https://images.unsplash.com/photo-15420518418c7-d293108421b6?q=80" },
+            { name: "Arashiyama Bamboo Grove", location: "Kyoto", desc: "Walking through this ethereal grove feels like stepping into a Studio Ghibli masterpiece.", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80" },
+            { name: "Dotonbori", location: "Osaka", desc: "Famous for its flashing neon lights and street food—truly the 'Baratie' of Japan.", img: "https://images.unsplash.com/photo-1552033037-142203f135b3?q=80" },
+            { name: "Ghibli Museum", location: "Mitaka", desc: "The official museum for Studio Ghibli. A whimsical labyrinth of animation and magic.", img: "https://images.unsplash.com/photo-1582211594533-268f4f1edeb9?q=80" }
+        ];
+
+        const animeMusic = [
+            { title: "Blue Bird", artist: "Ikimono-gakari", anime: "Naruto Shippuden", url: "https://www.youtube.com/watch?v=KpsJWFuVTJW", icon: "fa-dove" },
+            { title: "Bling-Bang-Bang-Born", artist: "Creepy Nuts", anime: "Mashle: Magic & Muscles", url: "https://www.youtube.com/watch?v=210R0ozmLwg", icon: "fa-wand-magic-sparkles" },
+            { title: "Unravel", artist: "TK from Ling Tosite Sigure", anime: "Tokyo Ghoul", url: "https://www.youtube.com/watch?v=7aMOurgDB-o", icon: "fa-mask" },
+            { title: "Gurenge", artist: "LiSA", anime: "Demon Slayer", url: "https://www.youtube.com/watch?v=CwkzK-F0Y00", icon: "fa-fire-flame-curved" },
+            { title: "Idol", artist: "YOASOBI", anime: "Oshi no Ko", url: "https://www.youtube.com/watch?v=ZRtdQ81jPUQ", icon: "fa-star" },
+            { title: "The Rumbling", artist: "SiM", anime: "Attack on Titan", url: "https://www.youtube.com/watch?v=OB8y0R6t7uA", icon: "fa-mountain-sun" }
+        ];
+
         function showSection(id) {
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
             document.getElementById(`sec-${id}`).classList.add('active');
             
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-nav', 'hover:bg-white/5', 'text-gray-300'));
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('active-nav');
+                b.classList.add('text-gray-400');
+            });
             
-            const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(id));
-            if(activeBtn) activeBtn.classList.add('active-nav');
+            const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(id));
+            if(btn) {
+                btn.classList.add('active-nav');
+                btn.classList.remove('text-gray-400');
+            }
 
-            window.scrollTo(0,0);
-            refreshStats();
-
-            if(id === 'news') loadSeasonalData();
             if(id === 'watchlist') renderWatchlist();
-            if(id === 'recipes') renderStaticGrid('recipes-grid', staticData.recipes);
-            if(id === 'travel') renderStaticGrid('travel-grid', staticData.travel);
+            if(id === 'recipes') renderRecipes();
+            if(id === 'music') renderMusic();
+            if(id === 'travel') renderTravel();
+            window.scrollTo(0,0);
         }
 
-        // --- STREAMING_CHUNK:Fetching real-time data from Jikan API... ---
-        async function fetchTop() {
-            const grid = document.getElementById('home-trending-grid');
-            grid.innerHTML = Array(5).fill('<div class="skeleton h-[450px] rounded-[32px]"></div>').join('');
+        async function fetchAnime(endpoint, title) {
+            const grid = document.getElementById('home-grid');
+            document.getElementById('home-title').innerHTML = `<span class="w-8 h-[2px] bg-red-500"></span> ${title}`;
+            grid.innerHTML = '<div class="col-span-full py-20 text-center animate-pulse text-xs text-gray-500 tracking-[0.5em] uppercase">Loading...</div>';
+            
             try {
-                const res = await fetch(`${API_BASE}/top/anime?limit=10`);
+                const res = await fetch(`${API}/${endpoint}`);
                 const json = await res.json();
-                state.currentDisplay = json.data;
+                state.currentData = json.data;
                 renderCards(grid, json.data);
-            } catch (e) { showToast("Connection Throttle..."); }
+            } catch (e) {
+                grid.innerHTML = '<div class="col-span-full py-20 text-center text-red-500 text-xs uppercase">Connection Failed</div>';
+            }
+        }
+
+        async function handleAiring() {
+            showSection('home');
+            await fetchAnime('seasons/now?limit=20', 'Currently Airing');
+        }
+
+        async function handleUpcoming() {
+            showSection('home');
+            await fetchAnime('seasons/upcoming?limit=20', 'Upcoming Releases');
         }
 
         async function performSearch(type) {
             const input = document.getElementById(`${type}-search-input`).value;
-            const grid = document.getElementById(`${type}-search-results`);
+            const grid = document.getElementById(`${type === 'anime' ? 'anime-results' : 'manga-results'}`);
             if(!input) return;
-
-            grid.innerHTML = Array(5).fill('<div class="skeleton h-[450px] rounded-[32px]"></div>').join('');
-            try {
-                const res = await fetch(`${API_BASE}/${type}?q=${input}&limit=20`);
-                const json = await res.json();
-                state.lastSearch = json.data;
-                renderCards(grid, json.data, true);
-            } catch (e) { showToast("API Busy, Wait 2s."); }
-        }
-
-        async function fetchMood(mood) {
-            const grid = document.getElementById('home-trending-grid');
-            grid.innerHTML = Array(5).fill('<div class="skeleton h-[450px] rounded-[32px]"></div>').join('');
             
-            let genres = mood === 'hype' ? '1,27' : mood === 'sad' ? '8,41' : mood === 'smart' ? '7,40' : '36,4';
+            grid.innerHTML = '<div class="col-span-full py-10 text-center text-[10px] text-gray-600 uppercase tracking-widest">Searching...</div>';
             try {
-                const res = await fetch(`${API_BASE}/anime?genres=${genres}&order_by=score&sort=desc&limit=10`);
+                const res = await fetch(`${API}/${type}?q=${input}&limit=20`);
                 const json = await res.json();
-                state.currentDisplay = json.data;
+                state.currentData = json.data;
                 renderCards(grid, json.data);
-                grid.scrollIntoView({ behavior: 'smooth' });
-            } catch (e) { showToast("Wait a second..."); }
+            } catch (e) { console.error(e); }
         }
 
-        async function loadSeasonalData() {
-            const airGrid = document.getElementById('airing-now-grid');
-            airGrid.innerHTML = '<div class="skeleton h-60 w-full col-span-3 rounded-3xl"></div>';
-            const airRes = await fetch(`${API_BASE}/seasons/now?limit=6`);
-            const airJson = await airRes.json();
-            renderCards(airGrid, airJson.data, false, true);
-
-            const upGrid = document.getElementById('upcoming-list');
-            upGrid.innerHTML = '';
-            const upRes = await fetch(`${API_BASE}/seasons/upcoming?limit=6`);
-            const upJson = await upRes.json();
-            upJson.data.forEach(item => {
-                const div = document.createElement('div');
-                div.className = "flex gap-5 items-center bg-white/5 p-4 rounded-3xl border border-white/5 hover:bg-white/10 transition-all cursor-pointer group";
-                div.innerHTML = `
-                    <img src="${item.images.jpg.small_image_url}" class="w-16 h-16 object-cover rounded-2xl group-hover:scale-110 transition-transform">
-                    <div>
-                        <h4 class="font-black text-sm line-clamp-1 italic">${item.title}</h4>
-                        <p class="text-[10px] text-gray-500 uppercase mt-1 tracking-widest">${item.type || 'TV'} Series</p>
-                    </div>
-                `;
-                upGrid.appendChild(div);
-            });
-        }
-
-        // --- STREAMING_CHUNK:Designing the dynamic card rendering system... ---
-        function renderCards(container, data, isSearch = false, compact = false) {
-            container.innerHTML = data.map((item, idx) => {
-                const malId = item.mal_id;
-                const inList = state.watchlist.some(i => i.mal_id === malId);
-                const currentRating = state.ratings[malId] || 0;
-
+        function renderCards(container, data) {
+            if(!data || data.length === 0) {
+                container.innerHTML = '<div class="col-span-full py-10 text-center text-gray-700">Empty results</div>';
+                return;
+            }
+            container.innerHTML = data.map(item => {
+                const inVault = state.watchlist.some(v => v.mal_id === item.mal_id);
                 return `
-                <div class="anime-card group relative">
-                    <div class="relative overflow-hidden">
-                        <img src="${item.images.jpg.large_image_url}" alt="${item.title}" loading="lazy">
-                        <div class="absolute inset-0 bg-black/80 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all gap-5 px-6">
-                            <button onclick="toggleWatchlist(${idx}, ${isSearch}, ${malId})" class="bg-red-500 w-16 h-16 rounded-3xl flex items-center justify-center hover:scale-110 active:scale-95 shadow-2xl transition-all">
-                                <i class="fa-solid ${inList ? 'fa-trash-can' : 'fa-plus'} text-xl"></i>
-                            </button>
-                            <div class="flex gap-2">
-                                ${[1,2,3,4,5].map(star => `
-                                    <i onclick="rateItem(${malId}, ${star})" class="rating-star fa-solid fa-star text-lg ${currentRating >= star ? 'active' : ''}"></i>
-                                `).join('')}
+                    <div class="anime-card">
+                        <div class="relative aspect-[3/4.5] group">
+                            <img src="${item.images.jpg.large_image_url}" class="w-full h-full object-cover" loading="lazy">
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4">
+                                <button onclick="toggleVault(${item.mal_id})" class="bg-white text-black w-10 h-10 rounded-full hover:scale-110 active:scale-90 transition-transform">
+                                    <i class="fa-solid ${inVault ? 'fa-minus' : 'fa-plus'}"></i>
+                                </button>
                             </div>
-                            <a href="${item.url}" target="_blank" class="text-[10px] uppercase font-black tracking-widest text-gray-400 hover:text-white transition-colors">Details →</a>
+                            <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/90 to-transparent">
+                                <p class="text-[10px] font-black text-yellow-500 uppercase"><i class="fa-solid fa-star"></i> ${item.score || 'N/A'}</p>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h4 class="text-[10px] font-black uppercase tracking-tight line-clamp-1 italic">${item.title}</h4>
+                            <p class="text-[8px] text-gray-500 font-bold uppercase mt-1">${item.type || 'Show'}</p>
                         </div>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h4 class="font-black text-base line-clamp-1 mb-3 italic uppercase">${item.title}</h4>
-                        <div class="flex items-center justify-between mt-auto">
-                            <span class="text-xs text-yellow-500 font-black"><i class="fa-solid fa-star"></i> ${item.score || '8.5'}</span>
-                            <span class="text-[9px] bg-white/10 px-3 py-1.5 rounded-lg text-gray-400 font-black uppercase tracking-tighter">${item.type || 'TV'}</span>
-                        </div>
-                    </div>
-                </div>
                 `;
             }).join('');
         }
 
-        function renderWatchlist() {
-            const grid = document.getElementById('watchlist-grid');
-            if(state.watchlist.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-40 text-center text-gray-700">
-                    <i class="fa-solid fa-ghost text-6xl mb-6 opacity-20"></i>
-                    <p class="text-xl font-black uppercase italic tracking-widest">The Vault is empty.</p>
-                </div>`;
-                return;
-            }
-            renderCards(grid, state.watchlist, false);
+        function renderMusic() {
+            document.getElementById('music-grid').innerHTML = animeMusic.map(m => `
+                <a href="${m.url}" target="_blank" class="music-card flex items-center gap-4 p-4 rounded-2xl group hover:border-red-500/50">
+                    <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-red-500 group-hover:bg-red-500 group-hover:text-white transition-all">
+                        <i class="fa-solid ${m.icon} text-lg"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-xs font-black uppercase tracking-tight italic">${m.title}</h4>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">${m.artist} • ${m.anime}</p>
+                    </div>
+                    <i class="fa-brands fa-youtube text-red-600 text-xl opacity-50 group-hover:opacity-100"></i>
+                </a>
+            `).join('');
         }
 
-        function renderStaticGrid(containerId, data) {
-            const grid = document.getElementById(containerId);
-            grid.innerHTML = data.map(item => `
-                <div class="anime-card h-full">
-                    <img src="${item.img}" class="h-64 object-cover">
-                    <div class="p-8">
-                        <h4 class="text-2xl font-black mb-3 italic uppercase tracking-tighter">${item.title}</h4>
-                        <p class="text-sm text-gray-500 mb-6 leading-relaxed">${item.desc}</p>
-                        ${item.link ? `<a href="${item.link}" target="_blank" class="inline-block bg-white/5 border border-white/10 px-6 py-3 rounded-xl text-red-500 font-black text-xs uppercase hover:bg-red-500 hover:text-white transition-all">View Full Recipe</a>` : ''}
+        function renderTravel() {
+            document.getElementById('travel-grid').innerHTML = travelDestinations.map(d => `
+                <div class="anime-card group relative overflow-hidden">
+                    <div class="h-48 overflow-hidden">
+                        <img src="${d.img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-70 group-hover:opacity-100">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-black text-xs uppercase text-red-500 italic">${d.name}</h4>
+                            <span class="text-[8px] font-bold bg-white/10 px-2 py-1 rounded text-gray-400 uppercase tracking-tighter">${d.location}</span>
+                        </div>
+                        <p class="text-[10px] text-gray-400 leading-relaxed">${d.desc}</p>
                     </div>
                 </div>
             `).join('');
         }
 
-        // --- ACTIONS & STATE ---
-        function toggleWatchlist(idx, isSearch, malId) {
-            const list = isSearch ? state.lastSearch : state.currentDisplay;
-            const item = list.find(i => i.mal_id === malId) || state.watchlist.find(i => i.mal_id === malId);
+        function toggleVault(id) {
+            const item = state.currentData.find(i => i.mal_id === id) || state.watchlist.find(i => i.mal_id === id);
+            const index = state.watchlist.findIndex(v => v.mal_id === id);
             
-            const index = state.watchlist.findIndex(i => i.mal_id === malId);
             if(index > -1) {
                 state.watchlist.splice(index, 1);
-                showToast("Removed from Vault.");
-            } else {
+                showToast("Removed from Vault");
+            } else if(item) {
                 state.watchlist.push(item);
-                showToast(`${item.title} Saved!`);
+                showToast("Added to Vault");
             }
-            saveAndSync();
-        }
-
-        function rateItem(malId, stars) {
-            state.ratings[malId] = stars;
-            saveAndSync();
-            showToast(`Rated ${stars}/5 Stars!`);
-        }
-
-        function saveAndSync() {
-            localStorage.setItem('otaku_pro_v5_watchlist', JSON.stringify(state.watchlist));
-            localStorage.setItem('otaku_pro_v5_ratings', JSON.stringify(state.ratings));
-            if(document.getElementById('sec-watchlist').classList.contains('active')) renderWatchlist();
-            refreshStats();
-        }
-
-        function refreshStats() {
-            const total = state.watchlist.length;
-            document.getElementById('stat-total').textContent = total;
-            document.getElementById('count-watched').textContent = total;
             
-            const animeCount = state.watchlist.filter(i => !i.chapters).length;
-            document.getElementById('stat-anime').textContent = animeCount;
-            document.getElementById('stat-manga').textContent = total - animeCount;
+            localStorage.setItem('otaku_vault', JSON.stringify(state.watchlist));
+            refreshUI();
+        }
 
-            const ratings = Object.values(state.ratings);
-            const avg = ratings.length ? (ratings.reduce((a,b) => a+b, 0) / ratings.length).toFixed(1) : "0.0";
-            document.getElementById('stat-rating').textContent = avg;
+        function renderWatchlist() {
+            renderCards(document.getElementById('watchlist-grid'), state.watchlist);
+        }
 
-            const progress = Math.min((total / 50) * 100, 100);
-            document.getElementById('progress-bar').style.width = `${progress}%`;
+        function renderRecipes() {
+            document.getElementById('recipes-grid').innerHTML = recipes.map(r => `
+                <div class="anime-card group">
+                    <img src="${r.img}" class="w-full h-40 object-cover opacity-60 group-hover:opacity-100 transition-opacity">
+                    <div class="p-4">
+                        <h4 class="font-black text-xs uppercase text-red-500 italic mb-2">${r.title}</h4>
+                        <p class="text-[10px] text-gray-400 leading-relaxed">${r.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function refreshUI() {
+            const count = state.watchlist.length;
+            document.getElementById('count-watched').textContent = count;
+            document.getElementById('progress-bar').style.width = `${Math.min(count * 4, 100)}%`;
+            
+            const activeSection = document.querySelector('.section-content.active');
+            if(activeSection && activeSection.id === 'sec-watchlist') renderWatchlist();
         }
 
         function showToast(msg) {
             const t = document.getElementById('toast');
-            document.getElementById('toast-msg').textContent = msg;
-            t.classList.remove('translate-y-48');
-            setTimeout(() => t.classList.add('translate-y-48'), 3000);
+            t.textContent = msg;
+            t.style.opacity = '1';
+            setTimeout(() => t.style.opacity = '0', 2000);
         }
 
         window.onload = () => {
-            fetchTop();
-            refreshStats();
-            console.log("OtakuLog Loaded | Welcome Rayaan (DSU Engineering)");
+            fetchAnime('top/anime?limit=20', 'Trending This Week');
+            refreshUI();
         };
     </script>
 </body>
