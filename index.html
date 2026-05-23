@@ -106,9 +106,265 @@
             transition: transform 0.2s;
         }
         .music-card:active { transform: scale(0.98); }
+        /* ===== START LOADER ===== */
+#startup-loader{
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,65,108,0.18), transparent 35%),
+        radial-gradient(circle at 80% 75%, rgba(0,210,255,0.10), transparent 35%),
+        rgba(5,5,10,0.98);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.7s ease;
+}
+
+#startup-loader.loader-hide{
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-core{
+    text-align: center;
+    padding: 2rem;
+    animation: loaderFloat 2.4s ease-in-out infinite;
+}
+
+.loader-ring{
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 1.5rem;
+    border-radius: 999px;
+    position: relative;
+    background: conic-gradient(from 0deg, #ff416c, #ff4b2b, #00d2ff, #ff416c);
+    animation: spinRing 2.2s linear infinite;
+    box-shadow: 0 0 40px rgba(255,65,108,0.25);
+}
+
+.loader-ring::before{
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: inherit;
+    background: #09090d;
+}
+
+.loader-mark{
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    font-size: 1.1rem;
+    color: white;
+    z-index: 1;
+}
+
+.loader-title{
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+    font-style: italic;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+}
+
+.loader-sub{
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    font-size: 0.65rem;
+    font-weight: 800;
+}
+
+.loader-bar{
+    width: min(260px, 80vw);
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    margin: 1.2rem auto 0;
+    overflow: hidden;
+}
+
+.loader-bar span{
+    display: block;
+    width: 40%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #ff416c, #ff4b2b);
+    animation: loaderBar 1.3s ease-in-out infinite;
+}
+
+@keyframes spinRing {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes loaderFloat {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-8px) scale(1.01); }
+}
+
+@keyframes loaderBar {
+    0% { transform: translateX(-120%); }
+    100% { transform: translateX(320%); }
+}
+
+/* ===== SUBTLE MICRO-INTERACTIONS ===== */
+.nav-btn,
+.anime-card,
+button,
+a,
+input,
+#toast {
+    transition:
+        transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-btn:hover{
+    transform: translateY(-1px);
+}
+
+.nav-btn:active,
+button:active,
+a:active{
+    transform: translateY(0) scale(0.98);
+}
+
+.anime-card{
+    will-change: transform, box-shadow;
+}
+
+.anime-card:hover{
+    transform: translateY(-6px) scale(1.01);
+}
+
+.anime-card img{
+    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1), filter 300ms ease;
+}
+
+.anime-card:hover img{
+    transform: scale(1.045);
+    filter: saturate(1.08);
+}
+
+button:hover,
+a:hover{
+    box-shadow: 0 10px 30px rgba(255,65,108,0.16);
+}
+
+input:focus{
+    box-shadow: 0 0 0 4px rgba(255,65,108,0.12);
+    border-color: rgba(255,65,108,0.35);
+}
+
+.glow-hover:hover{
+    box-shadow: 0 10px 40px rgba(255,65,108,0.16);
+    border-color: rgba(255,65,108,0.26);
+}
+
+.fade-in-soft{
+    animation: fadeSoft 0.6s ease;
+}
+
+@keyframes fadeSoft{
+    from{ opacity: 0; transform: translateY(8px); }
+    to{ opacity: 1; transform: translateY(0); }
+}
+
+/* ===== RANDOM SUGGESTER ===== */
+.suggester-box{
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 28px;
+    padding: 1rem;
+}
+
+.suggester-result{
+    min-height: 220px;
+}
+
+.suggester-card{
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 1rem;
+    align-items: start;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px;
+    padding: 1rem;
+    animation: fadeSoft 0.45s ease;
+}
+
+.suggester-card img{
+    width: 110px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 18px;
+}
+
+.suggester-meta{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.6rem 0 0.8rem;
+}
+
+.suggester-pill{
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 0.45rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    color: #d1d5db;
+}
+
+@media (max-width: 640px){
+    .suggester-card{
+        grid-template-columns: 1fr;
+    }
+    .suggester-card img{
+        width: 100%;
+        height: 220px;
+    }
+}
+
+/* ===== FOOTER ===== */
+.site-footer{
+    margin-top: 3rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.footer-inner{
+    padding: 1.2rem 1rem 2rem;
+}
+
+.footer-tag{
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #6b7280;
+    font-weight: 800;
+}
     </style>
 </head>
 <body class="flex flex-col md:flex-row min-h-screen">
+   
     <div class="bg-mesh"></div>
 
     <!-- SIDEBAR / BOTTOM NAV ON MOBILE -->
@@ -179,7 +435,7 @@
                     </h1>
                 </div>
             </div>
-
+     
             <h3 id="home-title" class="text-xl font-black mb-6 uppercase italic tracking-tighter flex items-center gap-2">
                 <span class="w-8 h-[2px] bg-red-500"></span> Trending This Week
             </h3>
@@ -244,8 +500,8 @@
                     <h2 class="text-4xl md:text-6xl font-black mb-4 italic uppercase tracking-tighter">RAYAAN <span class="text-red-500">KHAN</span></h2>
                     <p class="text-red-500 font-bold uppercase tracking-widest text-xs mb-6">Engineering Student @ Dayananda Sagar University</p>
                     <div class="space-y-4 text-gray-400 text-sm md:text-base leading-relaxed">
-                        <p>A hardcore anime enthusiast, engineering student who also writes. Currently pursuing my engineering degree at Dayananda Sagar University (DSU).</p>
-                        <p>My passion lies in merging the structured world of engineering with the vibrant aesthetics of anime culture.</p>
+                        <p>I am a hardcore anime enthusiast, engineering student, and digital storyteller. Currently pursuing my engineering degree at Dayananda Sagar University (DSU), I specialize in building logical architectures for the web.</p>
+                        <p>My passion lies in merging the structured world of engineering with the vibrant aesthetics of anime culture. I build digital tools that celebrate my love for high-stakes storytelling and complex world-building.</p>
                     </div>
                 </div>
 
@@ -253,7 +509,7 @@
                     <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
                         <i class="fa-solid fa-graduation-cap text-red-500 text-2xl mb-4"></i>
                         <h4 class="font-black uppercase mb-2 text-[10px] tracking-widest">DSU Engineering</h4>
-                        <p class="text-[10px] text-gray-500 leading-relaxed">Student.</p>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">Focusing on modern software development and architecture.</p>
                     </div>
                     <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
                         <i class="fa-solid fa-code-branch text-blue-500 text-2xl mb-4"></i>
@@ -337,7 +593,64 @@
             
             window.scrollTo(0,0);
         }
+async function fetchRandomEntry(type = 'anime') {
+    const box = document.getElementById('random-suggestion');
+    box.innerHTML = `<div class="w-full py-14 text-center animate-pulse text-gray-500 uppercase text-[10px] tracking-[0.25em]">Pulling random ${type}...</div>`;
 
+    try {
+        const res = await fetch(`${API_BASE}/random/${type}`);
+        const json = await res.json();
+        const item = json.data;
+
+        box.innerHTML = `
+            <div class="suggester-card text-left">
+                <img src="${item.images?.jpg?.large_image_url || item.images?.jpg?.image_url}" alt="${item.title}" loading="lazy">
+                <div>
+                    <h4 class="font-black text-lg md:text-2xl uppercase italic tracking-tighter">${item.title}</h4>
+                    <div class="suggester-meta">
+                        <span class="suggester-pill">${item.type || type}</span>
+                        <span class="suggester-pill">Score: ${item.score || 'N/A'}</span>
+                        <span class="suggester-pill">${item.status || 'Unknown status'}</span>
+                    </div>
+                    <p class="text-sm text-gray-300 leading-relaxed mb-4">
+                        ${(item.synopsis || 'No synopsis available.').slice(0, 260)}...
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="quickAddRandom(${item.mal_id}, '${type}')" class="bg-red-500 hover:bg-red-600 px-5 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest">
+                            Add To Vault
+                        </button>
+                        <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="border border-white/15 px-5 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-white/5">
+                            View MAL Page
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        state.randomPick = item;
+    } catch (e) {
+        box.innerHTML = `<div class="w-full py-14 text-center text-gray-600 uppercase font-black tracking-[0.25em] text-[10px]">Randomizer offline</div>`;
+        showToast("Random fetch failed");
+    }
+}
+
+function quickAddRandom(malId, type) {
+    const item = state.randomPick;
+    if (!item || item.mal_id !== malId) {
+        showToast("No live selection");
+        return;
+    }
+
+    const exists = state.watchlist.some(i => i.mal_id === malId);
+    if (exists) {
+        showToast("Already in Vault");
+        return;
+    }
+
+    state.watchlist.push(item);
+    saveAndSync();
+    showToast(`${type.toUpperCase()} added to Vault`);
+}
         async function fetchAnime(endpoint, title) {
             const grid = document.getElementById('home-grid');
             document.getElementById('home-title').innerHTML = `<span class="w-8 h-[2px] bg-red-500"></span> ${title}`;
