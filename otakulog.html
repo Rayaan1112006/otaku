@@ -248,10 +248,14 @@ footer h3 {
 </div>
 
 <script>
-// FIX: get references to the grid elements
+// DOM references
+const animeSearchInput = document.getElementById("animeSearchInput");
 const animeResults = document.getElementById("animeResults");
 const watchedGrid = document.getElementById("watchedGrid");
 const watchlistGrid = document.getElementById("watchlistGrid");
+
+const upcomingGrid = document.getElementById("upcomingGrid");
+const airingGrid = document.getElementById("airingGrid");
 
 let animeResultsData = [];
 let watchedList = JSON.parse(localStorage.getItem("watched")) || [];
@@ -273,9 +277,19 @@ async function searchAnime() {
     const q = animeSearchInput.value.trim();
     if (!q) return;
 
-    const res = await fetch(`https://api.jikan.moe/v4/anime?q=${q}&limit=12`);
-    const data = await res.json();
-    animeResultsData = data.data;
+    try {
+        const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&limit=12`);
+        const data = await res.json();
+        animeResultsData = (data && Array.isArray(data.data)) ? data.data : [];
+    } catch {
+        animeResultsData = [];
+    }
+
+    if (!animeResultsData.length) {
+        animeResults.innerHTML = "<p>No results found.</p>";
+        return;
+    }
+
     animeResults.innerHTML = animeResultsData.map((a,i)=>`
         <div class="card">
             <img src="${a.images.jpg.image_url}">
@@ -312,7 +326,85 @@ function simple(a){
     return `<div class="card"><img src="${a.images.jpg.image_url}"><p>${a.title}</p></div>`;
 }
 
+// Load upcoming and airing anime
+async function loadUpcoming() {
+    try {
+        const res = await fetch("https://api.jikan.moe/v4/seasons/upcoming?limit=12");
+        const data = await res.json();
+        const list = (data && Array.isArray(data.data)) ? data.data : [];
+        upcomingGrid.innerHTML = list.map(a => `
+            <div class="card">
+                <img src="${a.images.jpg.image_url}">
+                <p>${a.title}</p>
+            </div>
+        `).join("");
+    } catch {
+        upcomingGrid.innerHTML = "<p>Failed to load upcoming anime.</p>";
+    }
+}
+
+async function loadAiring() {
+    try {
+        const res = await fetch("https://api.jikan.moe/v4/seasons/now?limit=12");
+        const data = await res.json();
+        const list = (data && Array.isArray(data.data)) ? data.data : [];
+        airingGrid.innerHTML = list.map(a => `
+            <div class="card">
+                <img src="${a.images.jpg.image_url}">
+                <p>${a.title}</p>
+            </div>
+        `).join("");
+    } catch {
+        airingGrid.innerHTML = "<p>Failed to load currently airing anime.</p>";
+    }
+}
+
+// Optional: load top anime for Discover page
+async function loadTopAnime() {
+    try {
+        const res = await fetch("https://api.jikan.moe/v4/top/anime?limit=12");
+        const data = await res.json();
+        const list = (data && Array.isArray(data.data)) ? data.data : [];
+        const topAnimeGrid = document.getElementById("topAnimeGrid");
+        topAnimeGrid.innerHTML = list.map(a => `
+            <div class="card">
+                <img src="${a.images.jpg.image_url}">
+                <p>${a.title}</p>
+            </div>
+        `).join("");
+    } catch {
+        const topAnimeGrid = document.getElementById("topAnimeGrid");
+        topAnimeGrid.innerHTML = "<p>Failed to load top anime.</p>";
+    }
+}
+
+// Optional: simple manga search
+async function searchManga() {
+    const input = document.getElementById("mangaSearchInput");
+    const resultsDiv = document.getElementById("mangaResults");
+    const q = input.value.trim();
+    if (!q) return;
+
+    try {
+        const res = await fetch(`https://api.jikan.moe/v4/manga?q=${encodeURIComponent(q)}&limit=12`);
+        const data = await res.json();
+        const list = (data && Array.isArray(data.data)) ? data.data : [];
+        resultsDiv.innerHTML = list.map(a => `
+            <div class="card">
+                <img src="${a.images.jpg.image_url}">
+                <p>${a.title}</p>
+            </div>
+        `).join("");
+    } catch {
+        resultsDiv.innerHTML = "<p>Failed to load manga.</p>";
+    }
+}
+
+// Initialize
 save();
+loadUpcoming();
+loadAiring();
+loadTopAnime();
 </script>
 
 </body>
