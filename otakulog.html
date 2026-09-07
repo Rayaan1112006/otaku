@@ -248,6 +248,11 @@ footer h3 {
 </div>
 
 <script>
+// FIX: get references to the grid elements
+const animeResults = document.getElementById("animeResults");
+const watchedGrid = document.getElementById("watchedGrid");
+const watchlistGrid = document.getElementById("watchlistGrid");
+
 let animeResultsData = [];
 let watchedList = JSON.parse(localStorage.getItem("watched")) || [];
 let watchlistList = JSON.parse(localStorage.getItem("watchlist")) || [];
