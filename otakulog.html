@@ -261,24 +261,6 @@ let animeResultsData = [];
 let watchedList = JSON.parse(localStorage.getItem("watched")) || [];
 let watchlistList = JSON.parse(localStorage.getItem("watchlist")) || [];
 
-// ---------- AniList helpers ----------
-
-const ANILIST_API = "https://graphql.anilist.co";
-
-async function anilistQuery(query, variables = {}) {
-    const res = await fetch(ANILIST_API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query, variables })
-    });
-    if (!res.ok) throw new Error("AniList request failed");
-    const json = await res.json();
-    if (json.errors) throw new Error(json.errors[0].message || "AniList error");
-    return json.data;
-}
-
-// ---------- Page logic ----------
-
 function switchPage(id, btn) {
     document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
     document.getElementById(id).classList.add("active");
@@ -291,31 +273,14 @@ function quickSearch(name) {
     searchAnime();
 }
 
-// Search anime (AniList)
 async function searchAnime() {
     const q = animeSearchInput.value.trim();
     if (!q) return;
 
-    const query = `
-        query ($search: String) {
-            Page(perPage: 12) {
-                media(search: $search, type: ANIME) {
-                    id
-                    title { romaji english native }
-                    coverImage { large }
-                }
-            }
-        }
-    `;
-
     try {
-        const data = await anilistQuery(query, { search: q });
-        const list = data?.Page?.media || [];
-        animeResultsData = list.map(m => ({
-            id: m.id,
-            title: m.title.english || m.title.romaji || m.title.native || "Unknown",
-            image: m.coverImage.large
-        }));
+        const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&limit=12`);
+        const data = await res.json();
+        animeResultsData = (data && Array.isArray(data.data)) ? data.data : [];
     } catch {
         animeResultsData = [];
     }
@@ -325,68 +290,51 @@ async function searchAnime() {
         return;
     }
 
-    animeResults.innerHTML = animeResultsData.map((a, i) => `
+    animeResults.innerHTML = animeResultsData.map((a,i)=>`
         <div class="card">
-            <img src="${a.image}">
+            <img src="${a.images.jpg.image_url}">
             <p>${a.title}</p>
             <button class="icon" onclick="addWatched(${i})">✔</button>
             <button class="icon" onclick="addWatchlist(${i})">➕</button>
-        </div>
-    `).join("");
+        </div>`).join("");
 }
 
-function addWatched(i) {
+function addWatched(i){
     const a = animeResultsData[i];
-    if (!watchedList.find(x => x.id === a.id)) {
+    if(!watchedList.find(x=>x.mal_id===a.mal_id)){
         watchedList.push(a);
         save();
     }
 }
 
-function addWatchlist(i) {
+function addWatchlist(i){
     const a = animeResultsData[i];
-    if (!watchlistList.find(x => x.id === a.id)) {
+    if(!watchlistList.find(x=>x.mal_id===a.mal_id)){
         watchlistList.push(a);
         save();
     }
 }
 
-function save() {
-    localStorage.setItem("watched", JSON.stringify(watchedList));
-    localStorage.setItem("watchlist", JSON.stringify(watchlistList));
+function save(){
+    localStorage.setItem("watched",JSON.stringify(watchedList));
+    localStorage.setItem("watchlist",JSON.stringify(watchlistList));
     watchedGrid.innerHTML = watchedList.map(simple).join("");
     watchlistGrid.innerHTML = watchlistList.map(simple).join("");
 }
 
-function simple(a) {
-    return `<div class="card"><img src="${a.image}"><p>${a.title}</p></div>`;
+function simple(a){
+    return `<div class="card"><img src="${a.images.jpg.image_url}"><p>${a.title}</p></div>`;
 }
 
-// Upcoming seasons (AniList)
+// Load upcoming and airing anime
 async function loadUpcoming() {
-    const query = `
-        query () {
-            Page(perPage: 12) {
-                media(season: NEXT, type: ANIME, sort: POPULARITY_DESC) {
-                    id
-                    title { romaji english native }
-                    coverImage { large }
-                }
-            }
-        }
-    `;
-
     try {
-        const data = await anilistQuery(query);
-        const list = data?.Page?.media || [];
-        const mapped = list.map(m => ({
-            id: m.id,
-            title: m.title.english || m.title.romaji || m.title.native || "Unknown",
-            image: m.coverImage.large
-        }));
-        upcomingGrid.innerHTML = mapped.map(a => `
+        const res = await fetch("https://api.jikan.moe/v4/seasons/upcoming?limit=12");
+        const data = await res.json();
+        const list = (data && Array.isArray(data.data)) ? data.data : [];
+        upcomingGrid.innerHTML = list.map(a => `
             <div class="card">
-                <img src="${a.image}">
+                <img src="${a.images.jpg.image_url}">
                 <p>${a.title}</p>
             </div>
         `).join("");
@@ -395,31 +343,14 @@ async function loadUpcoming() {
     }
 }
 
-// Currently airing (AniList)
 async function loadAiring() {
-    const query = `
-        query () {
-            Page(perPage: 12) {
-                media(season: CURRENT, type: ANIME, sort: POPULARITY_DESC) {
-                    id
-                    title { romaji english native }
-                    coverImage { large }
-                }
-            }
-        }
-    `;
-
     try {
-        const data = await anilistQuery(query);
-        const list = data?.Page?.media || [];
-        const mapped = list.map(m => ({
-            id: m.id,
-            title: m.title.english || m.title.romaji || m.title.native || "Unknown",
-            image: m.coverImage.large
-        }));
-        airingGrid.innerHTML = mapped.map(a => `
+        const res = await fetch("https://api.jikan.moe/v4/seasons/now?limit=12");
+        const data = await res.json();
+        const list = (data && Array.isArray(data.data)) ? data.data : [];
+        airingGrid.innerHTML = list.map(a => `
             <div class="card">
-                <img src="${a.image}">
+                <img src="${a.images.jpg.image_url}">
                 <p>${a.title}</p>
             </div>
         `).join("");
@@ -428,32 +359,16 @@ async function loadAiring() {
     }
 }
 
-// Top anime (Discover)
+// Optional: load top anime for Discover page
 async function loadTopAnime() {
-    const query = `
-        query () {
-            Page(perPage: 12) {
-                media(type: ANIME, sort: SCORE_DESC) {
-                    id
-                    title { romaji english native }
-                    coverImage { large }
-                }
-            }
-        }
-    `;
-
     try {
-        const data = await anilistQuery(query);
-        const list = data?.Page?.media || [];
-        const mapped = list.map(m => ({
-            id: m.id,
-            title: m.title.english || m.title.romaji || m.title.native || "Unknown",
-            image: m.coverImage.large
-        }));
+        const res = await fetch("https://api.jikan.moe/v4/top/anime?limit=12");
+        const data = await res.json();
+        const list = (data && Array.isArray(data.data)) ? data.data : [];
         const topAnimeGrid = document.getElementById("topAnimeGrid");
-        topAnimeGrid.innerHTML = mapped.map(a => `
+        topAnimeGrid.innerHTML = list.map(a => `
             <div class="card">
-                <img src="${a.image}">
+                <img src="${a.images.jpg.image_url}">
                 <p>${a.title}</p>
             </div>
         `).join("");
@@ -463,71 +378,20 @@ async function loadTopAnime() {
     }
 }
 
-// Recommendations (simple: just reuse top anime for now)
-async function loadRecommendations() {
-    const query = `
-        query () {
-            Page(perPage: 12) {
-                media(type: ANIME, sort: TRENDING_DESC) {
-                    id
-                    title { romaji english native }
-                    coverImage { large }
-                }
-            }
-        }
-    `;
-
-    try {
-        const data = await anilistQuery(query);
-        const list = data?.Page?.media || [];
-        const mapped = list.map(m => ({
-            id: m.id,
-            title: m.title.english || m.title.romaji || m.title.native || "Unknown",
-            image: m.coverImage.large
-        }));
-        const recommendGrid = document.getElementById("recommendGrid");
-        recommendGrid.innerHTML = mapped.map(a => `
-            <div class="card">
-                <img src="${a.image}">
-                <p>${a.title}</p>
-            </div>
-        `).join("");
-    } catch {
-        const recommendGrid = document.getElementById("recommendGrid");
-        recommendGrid.innerHTML = "<p>Failed to load recommendations.</p>";
-    }
-}
-
-// Manga search (AniList)
+// Optional: simple manga search
 async function searchManga() {
     const input = document.getElementById("mangaSearchInput");
     const resultsDiv = document.getElementById("mangaResults");
     const q = input.value.trim();
     if (!q) return;
 
-    const query = `
-        query ($search: String) {
-            Page(perPage: 12) {
-                media(search: $search, type: MANGA) {
-                    id
-                    title { romaji english native }
-                    coverImage { large }
-                }
-            }
-        }
-    `;
-
     try {
-        const data = await anilistQuery(query, { search: q });
-        const list = data?.Page?.media || [];
-        const mapped = list.map(m => ({
-            id: m.id,
-            title: m.title.english || m.title.romaji || m.title.native || "Unknown",
-            image: m.coverImage.large
-        }));
-        resultsDiv.innerHTML = mapped.map(a => `
+        const res = await fetch(`https://api.jikan.moe/v4/manga?q=${encodeURIComponent(q)}&limit=12`);
+        const data = await res.json();
+        const list = (data && Array.isArray(data.data)) ? data.data : [];
+        resultsDiv.innerHTML = list.map(a => `
             <div class="card">
-                <img src="${a.image}">
+                <img src="${a.images.jpg.image_url}">
                 <p>${a.title}</p>
             </div>
         `).join("");
@@ -541,7 +405,6 @@ save();
 loadUpcoming();
 loadAiring();
 loadTopAnime();
-loadRecommendations();
 </script>
 
 </body>
